@@ -27,9 +27,9 @@ On Hashtag/Username/Keyword Search based Tweet dataset
 		6.5 User followers plot 
 
 # To Do 
-1. Named Entity Analysis 
-2. Correlation (?) (But how?)
-3. User Analysis 
-	3.1 Tweets analysis from a specific user timeline
- 	
+	1. Named Entity Analysis 
+	2. Correlation (?) (But how?)
+	3. User Analysis 
+		3.1 Tweets analysis from a specific user timeline
+
 	
