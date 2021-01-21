@@ -162,10 +162,10 @@ Keyword used for Tweets extraction :
 
 #### Top 20 negative usernames
 
-![tweet_20_pun](example_analysis/negative_usernames.png)
+![tweet_20_nun](example_analysis/negative_usernames.png)
 
 #### Top 20 neutral usernames 
-![tweet_20_pun](example_analysis/neutral_usernames.png)
+![tweet_20_neun](example_analysis/neutral_usernames.png)
 
 #### Total usernames count 
 
