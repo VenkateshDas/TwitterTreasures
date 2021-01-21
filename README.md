@@ -35,6 +35,8 @@ The below graphs and images are displayed for demo purpose only. No real-time an
 Keyword used for Tweets extraction : 
 
 	@ArminLaschet OR #Laschet OR #cdu
+	
+The data used for this analysis is stored in the [Data folder](https://github.com/VenkateshDas/TwitterTreasures/blob/main/Data/Example_Data/scraped_tweets_complete.csv). 
 
 ## Tweets source
 
