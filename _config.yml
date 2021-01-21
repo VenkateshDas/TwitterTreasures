@@ -13,8 +13,8 @@ include:
   - ISSUE_TEMPLATE.md
   - PULL_REQUEST_TEMPLATE.md
 
-title: A Basic task in SQLAlchemy
-description: Read - Insert - Query
+title: Twitter Treasures
+description: Analysis on Twitter data
 show_downloads: true
 
 theme: jekyll-theme-cayman
