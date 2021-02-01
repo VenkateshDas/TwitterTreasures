@@ -1,7 +1,7 @@
-# TwitterTreasures
+# [Twitter Treasures](https://twittertreasures.herokuapp.com/)
 
 ![tt_cover](images/tt_cover.png)
-[Twitter Treasures](https://twittertreasures.herokuapp.com/)
+<center>[Twitter Treasures](https://twittertreasures.herokuapp.com/)</center>
 
 # Features :
 
