@@ -1,62 +1,76 @@
 # TwitterTreasures
 
-This repository contains the code base to extract tweets from Twitter using Twitter API , analyse and visualise tweets for discovering information hidden in plain sight (data and opinion mining). 
+This repository contains the code base to extract tweets from Twitter using Twitter API , analyse and visualise tweets for discovering information hidden in plain sight (data and opinion mining).
 
-[Github Page](https://venkateshdas.github.io/TwitterTreasures/)
+[Twitter Treasures](https://twittertreasures.herokuapp.com/)
 
-# Features : 
+# Features :
+
 On Hashtag/Username/Keyword Search based Tweet dataset
 
-	1. Tweets extraction
-	2. Data Cleaning - Twitter data
-	3. Basic plots
-		3.1 Tweets source 
-		3.2 Location 
-		3.3 Language
-	4. Wordclouds
-		4.1 Location , Language , Source 
-		4.2 Tweets
-		4.3 User description 
-	5. N-Gram Analysis 
-		5.1 Unigram 
-		5.2 Bigram 
-		5.3 Trigram 
-	6. Sentiment Analysis
-		6.1 Sentiment count
-		6.2 Sentiment Wordcloud
-		6.3 Hashtage and Username Analysis 
-		6.4 Visualise Hashtags , Usernames and Retweets based on sentiments
-		6.5 User followers plot 
+    1. Tweets extraction
+    2. Data Cleaning - Twitter data
+    3. Basic plots
+    	3.1 Tweets source
+    	3.2 Location
+    	3.3 Language
+    4. Wordclouds
+    	4.1 Location , Language , Source
+    	4.2 Tweets
+    	4.3 User description
+    5. N-Gram Analysis
+    	5.1 Unigram
+    	5.2 Bigram
+    	5.3 Trigram
+    6. Sentiment Analysis
+    	6.1 Sentiment count
+    	6.2 Sentiment Wordcloud
+    	6.3 Hashtage and Username Analysis
+    	6.4 Visualise Hashtags , Usernames and Retweets based on sentiments
+    	6.5 User followers plot
+    	6.6 Sentiment Unigram Analysis (Visualisation)
+    	6.7 Sentiment Ngram Analysis (Visualisation)
+    	6.8 Sentiment Topic Analysis - using predefined topics (Visualisation)
 
-# Analysis (Examples)
+# Analysis
 
-The below graphs and images are displayed for demo purpose only. No real-time analysis were made based on these images.  
+The below graphs and images are displayed for demo purpose only. No real-time analysis were made based on these images.
 
-Keyword used for Tweets extraction : 
+Keyword used for Tweets extraction :
 
-	@ArminLaschet OR #Laschet OR #cdu
-	
-The data used for this analysis is stored in the [Data folder](https://github.com/VenkateshDas/TwitterTreasures/blob/main/Data/Example_Data/scraped_tweets_complete.csv). 
+    #COVID19
+
+[For more on Advance Search query](https://zapier.com/blog/twitter-advanced-search-guide/)
+
+## Tweets Extraction Demo
+
+![tt_extractor_demo](https://mega.nz/file/JTImWLIY#w8DoyAY_TAfb6ZA2GLNUOjuJtFCberlYDbq-ewuGVfg)
+
+## Tweets Analysis Demo
+
+![tt_analysis_demo](https://mega.nz/file/lDYUlBDZ#KjznHPNO-ZgjLnFFeCTSS90UfpiHVrE8YPg6C8kJK3I)
+
+<!-- The data used for this analysis is stored in the [Data folder](https://github.com/VenkateshDas/TwitterTreasures/blob/main/Data/Example_Data/scraped_tweets_complete.csv).
 
 ## Tweets source
 
 ![tweet_source](example_analysis/sources.png)
 
-## Location 
+## Location
 
 ![tweet_location](example_analysis/locations.png)
 
-## Language 
+## Language
 
 ![tweet_languages](example_analysis/languages.png)
 
-## Wordclouds 
+## Wordclouds
 
 ## Location wordcloud
 
 ![tweet_location_wc](example_analysis/location_wcloud_masked.png)
 
-## Source wordcloud 
+## Source wordcloud
 
 ![tweet_source_wc](example_analysis/source_wcloud.png)
 
@@ -73,46 +87,46 @@ The data used for this analysis is stored in the [Data folder](https://github.co
 
 
 
-## Ngram Analysis 
+## Ngram Analysis
 
-## Tweets Unigram 
+## Tweets Unigram
 
 ![tweet_uni](example_analysis/overall_tweet_freq_dist.png)
 
-## Tweets Bigrams 
+## Tweets Bigrams
 
 ![tweet_bi](example_analysis/tweet_bigram.png)
 
-## Tweets Trigrams 
+## Tweets Trigrams
 
 ![tweet_tri](example_analysis/tweet_trigram.png)
 
-## User description Unigram 
+## User description Unigram
 
 ![tweet_ud_uni](example_analysis/overall_tweet_desc_freq_dist.png)
 
-## User description Bigram 
+## User description Bigram
 ![tweet_ud_bi](example_analysis/tweet_desc_bigram.png)
 
-## User description Trigram 
+## User description Trigram
 
 ![tweet_ud_tri](example_analysis/tweet_desc_trigram.png)
 
-## Sentiment Analysis 
+## Sentiment Analysis
 
 ## Sentiment Count
 
 ![tweet_sc](example_analysis/tweet_sent_count.png)
 
-## Positive Wordcloud 
+## Positive Wordcloud
 
 ![tweet_pwc](example_analysis/positive_masked_cloud.png)
 
-## Neutral wordcloud 
+## Neutral wordcloud
 
 ![tweet_neuwc](example_analysis/neutral_masked_cloud.png)
 
-## Negative wordcloud 
+## Negative wordcloud
 
 ![tweet_nwc](example_analysis/negative_masked_cloud.png)
 
@@ -120,13 +134,13 @@ The data used for this analysis is stored in the [Data folder](https://github.co
 
 ![tweet_dates_sent](example_analysis/date_sentiment.png)
 
-## Hashtags 
+## Hashtags
 
-###Hashtags wordcloud 
+###Hashtags wordcloud
 
 ![tweet_ht_wc](example_analysis/hashtag_masked_cloud.png)
 
-## Top 20 Hashtags 
+## Top 20 Hashtags
 
 ![tweet_20_ht](example_analysis/most_used_hashtags.png)
 
@@ -134,11 +148,11 @@ The data used for this analysis is stored in the [Data folder](https://github.co
 
 ![tweet_20_pht](example_analysis/positive_hashtags.png)
 
-## Top 20 negative hashtags 
+## Top 20 negative hashtags
 
 ![tweet_20_nht](example_analysis/negative_hashtags.png)
 
-## Top 20 neutral hashtags 
+## Top 20 neutral hashtags
 
 ![tweet_20_neuht](example_analysis/neutral_hashtags.png)
 
@@ -146,17 +160,17 @@ The data used for this analysis is stored in the [Data folder](https://github.co
 
 ![tweet_ht_count](example_analysis/hashtag_count.png)
 
-## Common hastags wordcloud 
+## Common hastags wordcloud
 
 ![tweet_ht_wc](example_analysis/common_hashtag_wordcloud.png)
 
-## Usernames 
+## Usernames
 
 ## Usernames wordcloud
 
 ![tweet_un_wc](example_analysis/username_masked_cloud.png)
 
-## Top 20 usernames 
+## Top 20 usernames
 
 ![tweet_20_un](example_analysis/most_used_usernames.png)
 
@@ -168,10 +182,10 @@ The data used for this analysis is stored in the [Data folder](https://github.co
 
 ![tweet_20_nun](example_analysis/negative_usernames.png)
 
-## Top 20 neutral usernames 
+## Top 20 neutral usernames
 ![tweet_20_neun](example_analysis/neutral_usernames.png)
 
-## Total usernames count 
+## Total usernames count
 
 ![tweet_un_count](example_analysis/username_count.png)
 
@@ -185,11 +199,11 @@ The data used for this analysis is stored in the [Data folder](https://github.co
 
 ![tweet_prt](example_analysis/positive_retweetcount.png)
 
-## Negative tweet retweets count 
+## Negative tweet retweets count
 
 ![tweet_nrt](example_analysis/negative_retweetcount.png)
 
-## Neutral tweet retweet counts 
+## Neutral tweet retweet counts
 
 ![tweet_neurt](example_analysis/neutral_retweetcount.png)
 
@@ -197,17 +211,14 @@ The data used for this analysis is stored in the [Data folder](https://github.co
 ## User Followers plot (Top 10)
 
 ![tweet_uf](example_analysis/top_users_follower.png)
+ --> -->
 
+# To Do
 
-
-
-
-
-
-# To Do 
-	1. Named Entity Analysis 
-	2. Correlation (?) (But how?)
-	3. User Analysis 
-		3.1 Tweets analysis from a specific user timeline
-
-	
+    1. Using SNS scrape for extraction to get rid of the API limitations.
+    2. Add description on how to interpret the graphs
+    3. Structure the analysis based on a narration (!)
+    4. Named Entity Analysis
+    5. Correlation (?) (But how?)
+    6. User Analysis
+    	3.1 Tweets analysis from a specific user timeline
