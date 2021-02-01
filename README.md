@@ -35,7 +35,7 @@ On Hashtag/Username/Keyword Search based Tweet dataset
 
 The below graphs and images are displayed for demo purpose only. No real-time analysis were made based on these images.
 
-Keyword used for Tweets extraction :
+Example keyword used for Tweets extraction :
 
     #COVID19
 
