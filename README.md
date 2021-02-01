@@ -1,7 +1,7 @@
-# [Twitter Treasures](https://twittertreasures.herokuapp.com/)
+# [Twitter Treasures](https://bit.ly/36vRnGK)
 
 ![tt_cover](images/tt_cover.png)
-<p align = 'center'>[Twitter Treasures](https://twittertreasures.herokuapp.com/)</p>
+<p align = 'center'>Twitter Treasures</p>
 
 # Features :
 
@@ -48,6 +48,8 @@ Keyword used for Tweets extraction :
 ## Tweets Analysis Demo
 
 [tt_analysis_demo](https://mega.nz/file/lDYUlBDZ#KjznHPNO-ZgjLnFFeCTSS90UfpiHVrE8YPg6C8kJK3I)
+
+[Link to the App](https://bit.ly/36vRnGK)
 
 # To Do
 
