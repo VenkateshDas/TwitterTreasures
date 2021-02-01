@@ -43,11 +43,11 @@ Example keyword used for Tweets extraction :
 
 ## Tweets Extraction Demo
 
-[tt_extractor_demo](https://mega.nz/file/JTImWLIY#w8DoyAY_TAfb6ZA2GLNUOjuJtFCberlYDbq-ewuGVfg)
+[Tweet Extractor Demo](https://mega.nz/file/JTImWLIY#w8DoyAY_TAfb6ZA2GLNUOjuJtFCberlYDbq-ewuGVfg)
 
 ## Tweets Analysis Demo
 
-[tt_analysis_demo](https://mega.nz/file/lDYUlBDZ#KjznHPNO-ZgjLnFFeCTSS90UfpiHVrE8YPg6C8kJK3I)
+[Tweet Analysis Demo](https://mega.nz/file/lDYUlBDZ#KjznHPNO-ZgjLnFFeCTSS90UfpiHVrE8YPg6C8kJK3I)
 
 [Link to the App](https://bit.ly/36vRnGK)
 
