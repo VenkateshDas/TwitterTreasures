@@ -1,7 +1,7 @@
 # [Twitter Treasures](https://twittertreasures.herokuapp.com/)
 
 ![tt_cover](images/tt_cover.png)
-<center>[Twitter Treasures](https://twittertreasures.herokuapp.com/)</center>
+<p align = 'center'>[Twitter Treasures](https://twittertreasures.herokuapp.com/)</p>
 
 # Features :
 
