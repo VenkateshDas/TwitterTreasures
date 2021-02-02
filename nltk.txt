@@ -1,0 +1,4 @@
+movie_reviews
+words
+punkt
+stopwords
