@@ -1,6 +1,6 @@
 # [Twitter Treasures](https://bit.ly/36vRnGK)
 
-![tt_cover](images/tt_cover.png)
+![tt_cover](images/tt_cover.jpg)
 <p align = 'center'>Twitter Treasures</p>
 
 # Features :
