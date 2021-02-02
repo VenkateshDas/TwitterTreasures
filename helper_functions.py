@@ -19,6 +19,8 @@ from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.tokenize import wordpunct_tokenize
 from nltk.corpus import stopwords
 from nltk.probability import FreqDist
+from streamlit_disqus import st_disqus
+
 
 # from germansentiment import SentimentModel
 from PIL import Image
@@ -45,6 +47,14 @@ from textblob_de import TextBlobDE
 import scattertext as sctxt
 import streamlit.components.v1 as components
 
+import hashlib
+import sqlite3
+
+from streamlit_disqus import st_disqus
+
+conn = sqlite3.connect("user_data.db", check_same_thread=False)
+c = conn.cursor()
+
 nltk.download("movie_reviews")
 
 st.set_option("deprecation.showfileUploaderEncoding", False)
@@ -66,6 +76,42 @@ analyzer = SentimentIntensityAnalyzer()
 
 # def count_iterable(i):
 #     return sum(1 for e in i)
+
+
+def make_hashes(password):
+    return hashlib.sha256(str.encode(password)).hexdigest()
+
+
+def check_hashes(password, hashed_text):
+    if make_hashes(password) == hashed_text:
+        return hashed_text
+    return False
+
+
+def create_usertable():
+    c.execute("CREATE TABLE IF NOT EXISTS userstable(username TEXT, password TEXT)")
+
+
+def add_userdata(username, password):
+    c.execute(
+        "INSERT INTO userstable(username,password) VALUES (?,?)", (username, password)
+    )
+    conn.commit()
+
+
+def login_user(username, password):
+    c.execute(
+        "SELECT * FROM userstable WHERE username =? AND password = ?",
+        (username, password),
+    )
+    data = c.fetchall()
+    return data
+
+
+def view_all_users():
+    c.execute("SELECT * FROM userstable")
+    data = c.fetchall()
+    return data
 
 
 # function to perform data extraction
@@ -104,7 +150,7 @@ def scrape(api, words, numtweet, since_id, date_since, until_date, lang):
         wait_on_rate_limit_notify=True,
         lang=lang,
     ).items(numtweet)
-
+    # "#unitedAIRLINES since:2021-01-15 until:2021-02-01" - example query
     # length = count_iterable(tweets)
     # Counter to maintain Tweet Count
     i = 1
@@ -170,12 +216,12 @@ def read_tweets_csv(file_path):
 
 
 def extract_hashtag(input_text):
-    hashtags = re.findall(r"#[\w]*", input_text)
+    hashtags = re.findall(r"#[\w]*", str(input_text))
     return hashtags
 
 
 def extract_username(input_text):
-    usernames = re.findall(r"@[\w]*", input_text)
+    usernames = re.findall(r"@[\w]*", str(input_text))
     return usernames
 
 
@@ -185,11 +231,11 @@ def remove_urls(s):
 
 
 def clean_txt(input_text):
-
+    input_text = str(input_text)
     if type(input_text) != str:
         return input_text
     # removing hashtags,emojis,stopwords
-    input_text = re.sub(r"#[\w]*", "", input_text)
+    input_text = re.sub(r"#[\w]*", "", str(input_text))
     input_text = input_text.encode("ascii", "ignore")
     input_text = input_text.decode()
     input_text = remove_urls(input_text)

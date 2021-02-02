@@ -1,18 +1,19 @@
-tweepy==3.10.0
-numpy==1.18.3
-textblob==0.15.3
-pandas==0.24.2
+streamlit==0.75.0
 matplotlib==3.1.2
-textblob_de==0.4.3
-palettable==3.3.0
+textblob==0.15.3
+seaborn==0.9.0
+tweepy==3.10.0
 wordcloud==1.5.0
-nltk==3.2.5
-seaborn==0.10.1
-spacy >=2.3.0
+spacy ==2.3.1
 https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.3.1/en_core_web_sm-2.3.1.tar.gz#egg=en_core_web_sm==2.3.1
-streamlit==0.67.1
 transformers==3.4.0
 scattertext==0.1.0.0
+textblob_de==0.4.3
+numpy==1.18.3
+pandas==0.24.2
+nltk==3.2.5
+streamlit_disqus==0.1.3
+palettable==3.3.0
 Pillow==8.1.0
 vaderSentiment==3.3.2
-empath == 0.89
+empath ==0.89
