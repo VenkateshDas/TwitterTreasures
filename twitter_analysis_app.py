@@ -183,26 +183,26 @@ elif choice == "Log In":
                 if analyse_button:
                     """# Read File """
 
-                    political_df = read_tweets_csv(dataset_file)
+                    tweet_df = read_tweets_csv(dataset_file)
 
                     st.write("The intial dataset")
-                    st.write(political_df)
+                    st.write(tweet_df)
 
                     """# Data Cleaning"""
 
-                    political_df["Mentioned_Hashtags"] = political_df["text"].apply(
+                    tweet_df["Mentioned_Hashtags"] = tweet_df["text"].apply(
                         extract_hashtag
                     )  # To extract the hashtags if it was missed during the scraping.
-                    political_df["Mentioned_Usernames"] = political_df["text"].apply(
+                    tweet_df["Mentioned_Usernames"] = tweet_df["text"].apply(
                         extract_username
                     )
-                    political_df["Clean Tweet"] = political_df["text"].apply(clean_txt)
-                    political_df["Clean Description"] = political_df[
-                        "description"
-                    ].apply(clean_txt)
+                    tweet_df["Clean Tweet"] = tweet_df["text"].apply(clean_txt)
+                    tweet_df["Clean Description"] = tweet_df["description"].apply(
+                        clean_txt
+                    )
 
                     st.write("The cleaned dataset")
-                    st.write(political_df)
+                    st.write(tweet_df)
                     plot_df = st.write()
 
                     """# Exploratory Data Analysis"""
@@ -210,8 +210,8 @@ elif choice == "Log In":
 
                         plot_countplots(
                             "source",
-                            political_df,
-                            political_df["source"].value_counts().iloc[:10].index,
+                            tweet_df,
+                            tweet_df["source"].value_counts().iloc[:10].index,
                             "Tweets source based on the Hardware",
                         )
 
@@ -219,8 +219,8 @@ elif choice == "Log In":
 
                         plot_countplots(
                             "location",
-                            political_df,
-                            political_df["location"].value_counts().iloc[:15].index,
+                            tweet_df,
+                            tweet_df["location"].value_counts().iloc[:15].index,
                             "Top 15 Locations  of tweets for keywords " + keyword_used,
                         )
 
@@ -228,21 +228,21 @@ elif choice == "Log In":
 
                         plot_countplots(
                             "language",
-                            political_df,
-                            political_df["language"].value_counts().iloc[:10].index,
+                            tweet_df,
+                            tweet_df["language"].value_counts().iloc[:10].index,
                             "Top 5 language  of tweets for keywords " + keyword_used,
                         )
 
                         """## Wordclouds"""
 
                         localtion_list = list(
-                            political_df["location"].value_counts().iloc[:100].index
+                            tweet_df["location"].value_counts().iloc[:100].index
                         )
                         source_list = list(
-                            political_df["source"].value_counts().iloc[:10].index
+                            tweet_df["source"].value_counts().iloc[:10].index
                         )
                         languages_list = list(
-                            political_df["language"].value_counts().iloc[:20].index
+                            tweet_df["language"].value_counts().iloc[:20].index
                         )
 
                         """### Location wordcloud"""
@@ -277,7 +277,7 @@ elif choice == "Log In":
                         """### Tweets wordcloud"""
                         st.write("Masked Wordcloud")
                         masked_worldcloud_generate(
-                            list_data=political_df["Clean Tweet"],
+                            list_data=tweet_df["Clean Tweet"],
                             file_path="icons/twitter-brands.png",
                             background="black",
                             color=color_dark28,
@@ -286,7 +286,7 @@ elif choice == "Log In":
                         )
                         st.write("Unmasked Wordcloud")
                         worldcloud_generate(
-                            list_data=political_df["Clean Tweet"],
+                            list_data=tweet_df["Clean Tweet"],
                             background="black",
                             title="Wordcloud for Tweets on" + keyword_used + "",
                             font_path="font/AmaticSC-Bold.ttf",
@@ -296,7 +296,7 @@ elif choice == "Log In":
                         """### User description wordcloud"""
                         st.write("Masked Wordcloud")
                         masked_worldcloud_generate(
-                            list_data=political_df["Clean Description"],
+                            list_data=tweet_df["Clean Description"],
                             file_path="icons/sticky-note-solid.png",
                             background="black",
                             color=color_cubehelix,
@@ -307,7 +307,7 @@ elif choice == "Log In":
                         )
                         st.write("Masked Wordcloud")
                         worldcloud_generate(
-                            list_data=political_df["Clean Description"],
+                            list_data=tweet_df["Clean Description"],
                             background="black",
                             title="Wordcloud for Tweets Description on "
                             + keyword_used
@@ -321,28 +321,28 @@ elif choice == "Log In":
                     """### Tweets - Unigram"""
                     if "NGram Analysis" in basic_analysis:
                         unigram_analysis(
-                            political_df,
-                            political_df["Clean Tweet"],
+                            tweet_df,
+                            tweet_df["Clean Tweet"],
                             "Overall Tweets Frequency Distribution",
                         )
                         """### User description - Unigram """
                         unigram_analysis(
-                            political_df,
-                            political_df["Clean Description"],
+                            tweet_df,
+                            tweet_df["Clean Description"],
                             "Overall Tweets Description Frequency Distribution",
                         )
 
                         """ ### Tweets bigrams """
 
                         plot_bigrams(
-                            political_df["Clean Tweet"],
+                            tweet_df["Clean Tweet"],
                             "Most used Bigrams in Tweets on " + keyword_used,
                             most_common_n=30,
                         )
                         """### User Description Bigrams """
 
                         plot_bigrams(
-                            political_df["Clean Description"],
+                            tweet_df["Clean Description"],
                             "Most used Bigrams in Tweets Description on "
                             + keyword_used,
                             most_common_n=30,
@@ -351,14 +351,14 @@ elif choice == "Log In":
                         """### Tweets trigrams"""
 
                         plot_trigrams(
-                            political_df["Clean Tweet"],
+                            tweet_df["Clean Tweet"],
                             "Most used Trigrams in Tweets on " + keyword_used,
                             most_common_n=30,
                         )
 
                         """### Tweets Trigrams """
                         plot_trigrams(
-                            political_df["Clean Description"],
+                            tweet_df["Clean Description"],
                             "Most used Trigrams in Tweets Description on "
                             + keyword_used,
                             most_common_n=30,
@@ -366,35 +366,35 @@ elif choice == "Log In":
 
                     if english:
 
-                        if "sentiment" in political_df:
+                        if "sentiment" in tweet_df:
                             pass
                         else:
                             st.write(
                                 "It might take several minutes to analyse the sentiments..."
                             )
-                            political_df = english_sentiments(political_df)
+                            tweet_df = english_sentiments(tweet_df)
                             st.write("Sentiment Analysis Done on the tweets")
-                            st.write(political_df)
+                            st.write(tweet_df)
                             b64 = base64.b64encode(
-                                political_df.to_csv().encode()
+                                tweet_df.to_csv().encode()
                             ).decode()  # some strings <-> bytes conversions necessary here
                             """ ## Click the link below to download the Extracted tweets """
                             href = f'<a href="data:file/csv;base64,{b64}" download="extracted_tweets.csv">Download Tweets dataset with Sentiments CSV File for faster next time usage</a> (right-click and save as &lt;some_name&gt;.csv)'
                             st.markdown(href, unsafe_allow_html=True)
 
                     if german:
-                        if "sentiment" in political_df:
+                        if "sentiment" in tweet_df:
                             pass
                         else:
                             """## German sentiment Analysis"""
                             st.write(
                                 "It might take several minutes to analyse the sentiments..."
                             )
-                            political_df = german_sentiment_analysis(political_df)
+                            tweet_df = german_sentiment_analysis(tweet_df)
                             st.write("Sentiment Analysis Done on the tweets")
-                            st.write(political_df)
+                            st.write(tweet_df)
                             b64 = base64.b64encode(
-                                political_df.to_csv().encode()
+                                tweet_df.to_csv().encode()
                             ).decode()  # some strings <-> bytes conversions necessary here
                             """ ## Click the link below to download the Extracted tweets """
                             href = f'<a href="data:file/csv;base64,{b64}" download="extracted_tweets.csv">Download Tweets dataset with Sentiments CSV File for faster next time usage</a> (right-click and save as &lt;some_name&gt;.csv)'
@@ -405,7 +405,7 @@ elif choice == "Log In":
                     fig, ax = plt.subplots()
                     fig.set_size_inches(10, 8)
                     sns.countplot(
-                        x=political_df["sentiment"], palette="Set3", linewidth=0.5
+                        x=tweet_df["sentiment"], palette="Set3", linewidth=0.5
                     )
                     plt.title("Sentiments of tweets for keywords " + keyword_used)
                     st.pyplot(fig)
@@ -416,7 +416,7 @@ elif choice == "Log In":
                     pos = []
                     neg = []
                     neu = []
-                    for _, row in political_df.iterrows():
+                    for _, row in tweet_df.iterrows():
                         if row["sentiment"] == "positive":
                             pos.append(row["Clean Tweet"])
                         elif row["sentiment"] == "negative":
@@ -459,13 +459,17 @@ elif choice == "Log In":
                         font_path="font/BebasNeue-Regular.ttf",
                     )
 
+                    """## Tweet counts on the given dates"""
+
+                    tweets_on_dates(tweet_df, "Tweet counts based on Dates")
+
                     """## Sentiments on the given dates"""
 
-                    sentiments_on_dates(political_df, "Sentiments based on Dates")
+                    sentiments_on_dates(tweet_df, "Sentiments based on Dates")
 
                     """## Overall Hashtags and Username """
 
-                    HT_list, UN_list = list_hashtags_usernames(political_df)
+                    HT_list, UN_list = list_hashtags_usernames(tweet_df)
 
                     """### Hashtag wordcloud"""
 
@@ -501,7 +505,7 @@ elif choice == "Log In":
                         positive_retweets,
                         negative_retweets,
                         neutral_retweets,
-                    ) = sentiment_hashtags_usernames(political_df)
+                    ) = sentiment_hashtags_usernames(tweet_df)
 
                     """ ### Top 20 Hastags Overall """
 
@@ -588,13 +592,13 @@ elif choice == "Log In":
                     )
                     """### Tweet unigrams on sentiments"""
                     bm25_sentiments_html = scatterplot_sentiment_bm25_visualisation(
-                        political_df
+                        tweet_df
                     )
                     components.html(bm25_sentiments_html, height=1000, scrolling=True)
 
                     """### Tweet phrases on sentiments"""
                     sentiments_phrase_html = scatterplot_sentiment_log_scale_phrase_plot(
-                        political_df
+                        tweet_df
                     )
                     components.html(sentiments_phrase_html, height=1000, scrolling=True)
 
@@ -617,7 +621,7 @@ elif choice == "Log In":
 
                     """## User followers plot"""
 
-                    user_df = political_df.sort_values(
+                    user_df = tweet_df.sort_values(
                         by=["followers", "username"], ascending=False
                     )
                     followers_list = list(user_df["followers"].iloc[:30])
@@ -643,7 +647,7 @@ elif choice == "Log In":
 
                     if english:
                         """## Sentiment Topic Analysis"""
-                        sentiment_topic_html = sentiment_topic_analysis(political_df)
+                        sentiment_topic_html = sentiment_topic_analysis(tweet_df)
                         components.html(
                             sentiment_topic_html, height=1000, scrolling=True
                         )

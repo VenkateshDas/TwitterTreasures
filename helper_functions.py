@@ -417,9 +417,9 @@ def plot_trigrams(data, title, most_common_n):
 """## English Sentiment Analysis """
 
 
-def get_scores(text):
-    txt = sentiment(text)
-    return txt[0]["label"]
+# def get_scores(text):
+#     txt = sentiment(text)
+#     return txt[0]["label"]
 
 
 def convert_lower(text):
@@ -462,6 +462,16 @@ def divide_chunks(l, n):
 
 
 # Date based sentiments
+
+
+def tweets_on_dates(df, title):
+    fig, ax = plt.subplots()
+    fig.set_size_inches(11.7, 8.27)
+    g = sns.countplot(df["date"].dt.date, palette="Set3", linewidth=0.5)
+    plt.xticks(rotation=90)
+    plt.title(title)
+    st.pyplot(fig)
+    plt.close()
 
 
 def sentiments_on_dates(df, title):
