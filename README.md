@@ -49,7 +49,9 @@ Tweet Extractor Demo
 
 Tweet Analysis Demo
 
-[Link to the App](https://bit.ly/36vRnGK)
+[Link to the App](https://bit.ly/36vRnGK) - Heroku
+[Link to Streamlit share App](https://share.streamlit.io/venkateshdas/twittertreasures/main/twitter_analysis_app.py)
+
 
 # To Do
 
