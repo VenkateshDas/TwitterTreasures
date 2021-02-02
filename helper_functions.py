@@ -32,7 +32,7 @@ from palettable.colorbrewer.qualitative import Dark2_8
 from palettable import cubehelix
 from matplotlib import cm
 
-from transformers import *
+# from transformers import *
 import streamlit as st
 import tweepy
 import base64
