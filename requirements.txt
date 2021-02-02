@@ -11,7 +11,7 @@ scattertext==0.1.0.0
 textblob_de==0.4.3
 numpy==1.18.3
 pandas==0.24.2
-nltk==3.2.5
+nltk==3.4
 streamlit_disqus==0.1.3
 palettable==3.3.0
 Pillow==8.1.0
