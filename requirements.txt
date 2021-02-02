@@ -6,7 +6,7 @@ tweepy==3.10.0
 wordcloud==1.5.0
 spacy ==2.3.1
 https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.3.1/en_core_web_sm-2.3.1.tar.gz#egg=en_core_web_sm==2.3.1
-transformers==3.4.0
+# transformers==3.4.0
 scattertext==0.1.0.0
 textblob_de==0.4.3
 numpy==1.18.3
