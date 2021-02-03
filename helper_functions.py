@@ -247,6 +247,8 @@ def clean_txt(input_text):
     r = re.findall(r"@[\w]*", input_text)
     for i in r:
         input_text = re.sub(i, "", input_text)
+        input_text = re.sub("amp", "", input_text)
+        input_text = re.sub("nan", "", input_text)
 
     # removing stopwords
     input_text = " ".join(
