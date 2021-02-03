@@ -66,6 +66,8 @@ nltk.download("stopwords")
 german_stop_words = stopwords.words("german")
 english_stop_word = stopwords.words("english")
 stopwords = german_stop_words + english_stop_word
+stopwords.append("amp")
+stopwords.append("nan")
 
 nlp = en_core_web_sm.load()
 
