@@ -95,14 +95,6 @@ elif choice == "Log In":
             consumer_key = result[0][2]
             consumer_secret = result[0][3]
             trends, url, volume = get_trends(consumer_key, consumer_secret)
-            masked_worldcloud_generate(
-                list_data=trends,
-                file_path="icons/twitter-brands.png",
-                background="black",
-                color=color_cubehelix,
-                title="Wordcloud for Trending topics ",
-                font_path="font/AmaticSC-Bold.ttf",
-            )
             trend_dict = {
                 "Trending Topics": trends,
                 "Tweet Volume": volume,
@@ -110,6 +102,15 @@ elif choice == "Log In":
             }
             trend_df = pd.DataFrame(trend_dict)
             st.dataframe(trend_df)
+            masked_worldcloud_generate(
+                list_data=trends,
+                file_path="icons/twitter-brands.png",
+                background="white",
+                color=color_dark28,
+                title="Wordcloud for Trending topics ",
+                font_path="font/AmaticSC-Bold.ttf",
+            )
+
             st.sidebar.title("Twitter Analytics option")
             extract_box = st.sidebar.checkbox("Extract Tweets")
             analyse_box = st.sidebar.checkbox("Analyse Custom Query")
