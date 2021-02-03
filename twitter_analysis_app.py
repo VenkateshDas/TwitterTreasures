@@ -91,20 +91,25 @@ elif choice == "Log In":
             2. **Forming better search queries for twitter API** : [Advanced Query formation](https://unionmetrics.zendesk.com/hc/en-us/articles/201201546-What-can-I-search-for-in-a-TweetReach-report-)
 
             """
-            st.title("Top Trending tweets")
+            st.title("Top Trending Topics in Twitter")
             consumer_key = result[0][2]
             consumer_secret = result[0][3]
-            trends = get_trends(consumer_key, consumer_secret)
+            trends, url, volume = get_trends(consumer_key, consumer_secret)
             masked_worldcloud_generate(
                 list_data=trends,
                 file_path="icons/twitter-brands.png",
                 background="black",
-                color=color_dark28,
+                color=color_cubehelix,
                 title="Wordcloud for Trending topics ",
-                font_path="font/RobotoCondensed-Regular.ttf",
+                font_path="font/AmaticSC-Bold.ttf",
             )
-            # trend_dict = {"Trending Topics": trends}
-            # st.table(trend_dict)
+            trend_dict = {
+                "Trending Topics": trends,
+                "Tweet Volume": volume,
+                "Topic Link": url,
+            }
+            trend_df = pd.DataFrame(trend_dict)
+            st.dataframe(trend_df)
             st.sidebar.title("Twitter Analytics option")
             extract_box = st.sidebar.checkbox("Extract Tweets")
             analyse_box = st.sidebar.checkbox("Analyse Custom Query")

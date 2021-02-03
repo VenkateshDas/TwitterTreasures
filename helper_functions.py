@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import pandas as pd
 import re
 import os
@@ -68,6 +70,8 @@ english_stop_word = stopwords.words("english")
 stopwords = german_stop_words + english_stop_word
 stopwords.append("amp")
 stopwords.append("nan")
+
+matplotlib.rc("font", **{"sans-serif": "Arial", "family": "sans-serif"})
 
 nlp = en_core_web_sm.load()
 
@@ -755,5 +759,8 @@ def get_trends(consumer_key, consumer_secret):
     trends1 = api.trends_place(1)
     data = trends1[0]
     trends = data["trends"]
-    names = [trend["name"] for trend in trends]
-    return names
+    names = [trend_name["name"] for trend_name in trends]
+    url = [trend_url["url"] for trend_url in trends]
+    volume = [trend_volume["tweet_volume"] for trend_volume in trends]
+    return names, url, volume
+

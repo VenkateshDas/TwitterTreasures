@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 streamlit==0.75.0
 matplotlib==3.1.2
 textblob==0.15.3
