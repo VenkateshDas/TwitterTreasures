@@ -1,64 +1,59 @@
 # [Twitter Treasures](https://bit.ly/36vRnGK)
+This repository contains the code base to extract tweets from Twitter using Twitter API , analyse and visualise tweets for discovering information hidden in plain sight (data and opinion mining). 
 
-![tt_cover](images/tt_cover.jpg)
-<p align = 'center'>Twitter Treasures</p>
+# How to Start
 
-# Features :
+![how_to_start](images/how_to_start.png)
 
-On Hashtag/Username/Keyword Search based Tweet dataset
+#  Functions
 
-    1. Tweets extraction
-    2. Data Cleaning - Twitter data
-    3. Basic plots
-    	3.1 Tweets source
-    	3.2 Location
-    	3.3 Language
-    4. Wordclouds
-    	4.1 Location , Language , Source
-    	4.2 Tweets
-    	4.3 User description
-    5. N-Gram Analysis
-    	5.1 Unigram
-    	5.2 Bigram
-    	5.3 Trigram
-    6. Sentiment Analysis
-    	6.1 Sentiment count
-    	6.2 Sentiment Wordcloud
-    	6.3 Hashtage and Username Analysis
-    	6.4 Visualise Hashtags , Usernames and Retweets based on sentiments
-    	6.5 User followers plot
-    	6.6 Sentiment Unigram Analysis (Visualisation)
-    	6.7 Sentiment Ngram Analysis (Visualisation)
-    	6.8 Sentiment Topic Analysis - using predefined topics (Visualisation)
+> 1. Login funcitonalities
+>   	- Username and Password
+>   2. Sign Up functionalities 
+>   	- Username and Password
+>   	- [Twitter API](https://developer.twitter.com/en/apply-for-access) : Consumer    Key  and Secret Key
+>   3. View top trending tweets (Worldwide)
+>   	- Provides Top 50 worldwide trending tweets
+>      - Dataframe with Topic, Tweet Volume and URL
+>   	- Trending topics Wordcloud
+>   4. Extract Tweets with Recent search Twitter API
+>   	- From the current day to last 7 days
+>   	- Advance Twitter Search Query can be used
+>   5. Analysis of Twitter data
+>   	- Tweets preprocessing
+>   	- Metadata analysis (Wordclouds and Bar plots)
+>   		- Source
+>   		- Location
+>   		- Language
+	>   	- Tweets and User description
+>   	- Ngram Analysis (Line and Bar plots)
+>   		-Unigram
+>   		- Bigram
+>   		- Trigram 
+>      - 	Sentiment Analysis (Naive bayes Algorithm) - Basic Approach
+>   		- Hashtag Analysis  (Bar plots and Wordcloud)
+>   		- Username Analysis (Bar plots and Wordcloud)
+>   		-  Twitter sentiments visualisations (Bar plots , Wordcloud , Interactive HTML graphs for sentiments visual)
+>   		- Sentiments topic analysis(Interactive HTML graphs for sentiments visual)
+>   7. Disqus form for better feedbacks and resolving errors.
+>   	- Mail address is also provided for better accessibility
 
-# Analysis
+# Rapid Prototyping Pipeline
 
-The below graphs and images are displayed for demo purpose only. No real-time analysis were made based on these images.
+![prototyping_pipeline](images/rapid_prototyping_pipeline.png)
 
-Example keyword used for Tweets extraction :
+### Heroku deployment 
 
-    #COVID19
-
-[For more on Advance Search query](https://zapier.com/blog/twitter-advanced-search-guide/)
-
-## Tweets Extraction Demo
-
-Tweet Extractor Demo
-
-## Tweets Analysis Demo
-
-Tweet Analysis Demo
-
-[Link to the App](https://bit.ly/36vRnGK) - Heroku
-[Link to Streamlit share App](https://share.streamlit.io/venkateshdas/twittertreasures/main/twitter_analysis_app.py)
-
+![heroku_pipeline](images/heroku_deploy_process.png)
 
 # To Do
 
-    1. Using SNS scrape for extraction to get rid of the API limitations.
-    2. Add description on how to interpret the graphs
-    3. Structure the analysis based on a narration (!)
-    4. Named Entity Analysis
-    5. Correlation (?) (But how?)
-    6. User Analysis
-    	3.1 Tweets analysis from a specific user timeline
+  
+
+>  1. Using SNS scrape for extraction to get rid of the API limitations.
+>    2. Add description on how to interpret the graphs
+>    3. Structure the analysis based on a narration (!)
+>    4. Named Entity Analysis
+>    5. Correlation (?) (But how?)
+>    6. User Profile Analysis
+>    	- Tweets analysis from a specific user timeline
