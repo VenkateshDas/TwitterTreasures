@@ -89,12 +89,15 @@ def check_hashes(password, hashed_text):
 
 
 def create_usertable():
-    c.execute("CREATE TABLE IF NOT EXISTS userstable(username TEXT, password TEXT)")
-
-
-def add_userdata(username, password):
     c.execute(
-        "INSERT INTO userstable(username,password) VALUES (?,?)", (username, password)
+        "CREATE TABLE IF NOT EXISTS userstable(username TEXT, password TEXT, consumer_key TEXT, consumer_secret TEXT )"
+    )
+
+
+def add_userdata(username, password, consumer_key, consumer_secret):
+    c.execute(
+        "INSERT INTO userstable(username,password,consumer_key,consumer_secret) VALUES (?,?,?,?)",
+        (username, password, consumer_key, consumer_secret),
     )
     conn.commit()
 
@@ -740,3 +743,13 @@ def sentiment_topic_analysis(df):
     )
 
     return html
+
+
+def get_trends(consumer_key, consumer_secret):
+    auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
+    api = tweepy.API(auth)
+    trends1 = api.trends_place(1)
+    data = trends1[0]
+    trends = data["trends"]
+    names = [trend["name"] for trend in trends]
+    return names

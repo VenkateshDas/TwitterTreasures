@@ -18,7 +18,7 @@ st.sidebar.image(
     width=300,
 )
 
-menu = ["Home", "Log In", "Sign Up", "Contact Form"]
+menu = ["Home", "Log In", "Sign Up"]
 choice = st.sidebar.selectbox("Menu", menu)
 
 
@@ -33,7 +33,9 @@ if choice == "Home":
         """This is a basic twitter data analysis web app. It is a **proof of concept** and **not optimised for any real time commercial application or insights**. If you encounter any
         any inconsistency or error during the runtime, please get back to us with the error and the dataset so that it can be reproduced and solved.
         Use the Disqus form to submit the error message or send us a mail at **feedback.twittertreasures@gmail.com** for anything more.
-        """,
+
+        If you want to just have fun with twitter data, choose a Trending Topic and start your analysis and find something interesting! .
+        """
     )
 
     """
@@ -89,22 +91,26 @@ elif choice == "Log In":
             2. **Forming better search queries for twitter API** : [Advanced Query formation](https://unionmetrics.zendesk.com/hc/en-us/articles/201201546-What-can-I-search-for-in-a-TweetReach-report-)
 
             """
+            st.title("Top Trending tweets")
+            consumer_key = result[0][2]
+            consumer_secret = result[0][3]
+            trends = get_trends(consumer_key, consumer_secret)
+            masked_worldcloud_generate(
+                list_data=trends,
+                file_path="icons/twitter-brands.png",
+                background="black",
+                color=color_dark28,
+                title="Wordcloud for Trending topics ",
+                font_path="font/RobotoCondensed-Regular.ttf",
+            )
+            # trend_dict = {"Trending Topics": trends}
+            # st.table(trend_dict)
             st.sidebar.title("Twitter Analytics option")
             extract_box = st.sidebar.checkbox("Extract Tweets")
-            analyse_box = st.sidebar.checkbox("Analyse button")
+            analyse_box = st.sidebar.checkbox("Analyse Custom Query")
 
             if extract_box:
-                """## Twitter Developer API keys """
-                consumer_key = st.text_input(
-                    "Enter the consumer key", "Ex : qwEAjGiYlaNYVHqGpmiQoeWn6"
-                )
-                consumer_secret = st.text_input(
-                    "Enter the Consumer secret key",
-                    "Ex : zbsjkxDxJJ5EHrTYPeKbnDEQIyH36YsTGkSlCFiDywpbAQuEkr",
-                )
 
-                # consumer_key = "qwEAjGiYlaNYVHqGpmiQoeWn6"
-                # consumer_secret = "zbsjkxDxJJ5EHrTYPeKbnDEQIyH36YsTGkSlCFiDywpbAQuEkr"
                 """## Tweets search Information """
                 st.write("Fill labels with '*', if confused.")
                 words = st.text_input(
@@ -117,18 +123,17 @@ elif choice == "Log In":
                 if lang == "any":
                     lang = ""
                 date_since = st.text_input(
-                    "Extract tweets since (Format yyyy-mm-dd) *", value="2021-01-26"
+                    "Extract tweets since (Format yyyy-mm-dd) * Recent search API allows only to get tweets of the previous 7 days",
+                    value="2021-01-26",
                 )
                 until_date = st.text_input(
                     "Extract tweets till (Format yyyy-mm-dd)", value=""
                 )
                 # number of tweets you want to extract in one run
                 numtweet = st.number_input(
-                    "Enter the number of tweets to be extracted *"
+                    "Enter the number of tweets to be extracted (Max 15000) *"
                 )
-                since_id = st.text_input(
-                    "Extract tweets above this specific tweet id", ""
-                )
+                since_id = st.text_input("Extract tweets above this specific tweet id")
                 extract = st.button("Extract tweets")
                 if extract:
                     auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
@@ -651,11 +656,12 @@ elif choice == "Log In":
                         components.html(
                             sentiment_topic_html, height=1000, scrolling=True
                         )
+
         else:
             st.warning("Incorrect Username/Password")
 elif choice == "Sign Up":
 
-    st.sidebar.warning("Currently SignUp option is disabled. Coming Soon")
+    # st.sidebar.warning("Currently SignUp option is disabled. Coming Soon")
 
     st.image("images/tt_cover.jpg")
 
@@ -672,31 +678,43 @@ elif choice == "Sign Up":
     st.sidebar.subheader("Create New Account")
     new_user = st.sidebar.text_input("Username")
     new_password = st.sidebar.text_input("Password", type="password")
+    st.sidebar.write("Twitter API")
+    consumer_key = st.sidebar.text_input("Consumer Key")
+    consumer_secret = st.sidebar.text_input("Secret Key")
 
     if st.sidebar.button("Signup"):
         create_usertable()
-        add_userdata(new_user, make_hashes(new_password))
-        st.success("You have successfully created a valid Account")
-        st.info("Go to Login Menu to login")
+        try:
+            auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
+            api = tweepy.API(auth)
+            add_userdata(
+                new_user, make_hashes(new_password), consumer_key, consumer_secret
+            )
+            st.success("You have successfully created a valid Account")
+            st.info("Go to Login Menu to login")
+        except Exception as e:
+            print(e)
+            st.warning("Invalid API keys. Please provide valid keys for Signing up")
 
-elif choice == "Contact Form":
+# elif choice == "Contact Form":
 
-    st.image("images/tt_cover.jpg")
+#     st.image("images/tt_cover.jpg")
 
-    """
-    # Twitter Treasures
-    ### Create your story with DATA...
-    """
-    st.subheader("Contact Form")
-    st.warning(
-        "Not Yet Implemented ! Coming soon ... For errors and feedback please send mail to feedback.twittertreasures@gmail.com"
-    )
-    # name = st.text_input("Name ")
-    # email = st.text_input("Email ")
-    # subject = st.text_input("Subject")
-    # message = st.text_area("Message")
-    # dataset_file = st.file_uploader("Attach any file")
-    # submit_button = st.button("Send")
+#     """
+#     # Twitter Treasures
+#     ### Create your story with DATA...
+#     """
+#     st.subheader("Contact Form")
+#     st.warning(
+#         "Not Yet Implemented ! Coming soon ... For errors and feedback please send mail to feedback.twittertreasures@gmail.com"
+#     )
+#     # name = st.text_input("Name ")
+#     # email = st.text_input("Email ")
+#     # subject = st.text_input("Subject")
+#     # message = st.text_area("Message")
+#     # dataset_file = st.file_uploader("Attach any file")
+#     # submit_button = st.button("Send")
+
 
 st_disqus(
     "https-twittertreasures-herokuapp-com",
