@@ -104,7 +104,7 @@ elif choice == "Log In":
             st.dataframe(trend_df)
             masked_worldcloud_generate(
                 list_data=trends,
-                file_path="icons/twitter-brands.png",
+                file_path="icons/chart-line-solid.png",
                 background="white",
                 color=color_dark28,
                 title="Wordcloud for Trending topics ",
