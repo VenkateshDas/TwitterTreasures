@@ -38,6 +38,8 @@ if choice == "Home":
         """
     )
 
+    st.image("images/how to start.png", width=800)
+
     """
     ## Usage
 
