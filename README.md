@@ -4,7 +4,7 @@ This repository contains the code base to extract tweets from Twitter using Twit
 
 # How to Start
 
-![how_to_start](images/how to start.png)
+![how_to_start](images/how_to_start.png)
 
 # Functions
 
