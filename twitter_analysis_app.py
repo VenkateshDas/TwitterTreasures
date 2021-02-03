@@ -38,7 +38,7 @@ if choice == "Home":
         """
     )
 
-    st.image("images/how to start.png", width=800)
+    st.image("images/how_to_start.png", width=800)
 
     """
     ## Usage
