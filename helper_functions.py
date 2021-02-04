@@ -80,10 +80,6 @@ nlp = en_core_web_sm.load()
 analyzer = SentimentIntensityAnalyzer()
 
 
-# def count_iterable(i):
-#     return sum(1 for e in i)
-
-
 def make_hashes(password):
     return hashlib.sha256(str.encode(password)).hexdigest()
 

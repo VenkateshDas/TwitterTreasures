@@ -50,6 +50,8 @@ This repository contains the code base to extract tweets from Twitter using Twit
 
 # Rapid Prototyping Pipeline
 
+The amount of time it took for me to build the first version of the usable application was just 2 days from conceptualisation of the idea to deployment. This was my first time development of a usable application.Streamlit is a must know tool for all python based Data App developers.
+
 ![prototyping_pipeline](images/rapid_prototyping_pipeline.png)
 
 ### Heroku deployment
