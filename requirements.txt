@@ -103,7 +103,6 @@ singledispatch==3.4.0.3
 six==1.15.0
 smart-open==3.0.0
 smmap==3.0.5
-snscrape==0.3.5.dev95+g5cd3b7d
 soupsieve==2.1
 spacy==3.0.0a41
 spacy-legacy==3.0.1
