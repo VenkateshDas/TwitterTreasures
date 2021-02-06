@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: en-core-web-sm
+Version: 3.0.0
+Summary: English pipeline optimized for CPU. Components: tok2vec, tagger, parser, senter, ner, attribute_ruler, lemmatizer.
+Home-page: https://explosion.ai
+Author: Explosion
+Author-email: contact@explosion.ai
+License: MIT
+Description: UNKNOWN
+Platform: UNKNOWN
