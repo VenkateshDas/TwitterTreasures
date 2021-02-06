@@ -92,9 +92,28 @@ elif choice == "Log In":
 
             """
             st.title("Top Trending Topics in Twitter")
+            country_list = []
+            trends = []
+            url = []
+            volume = []
             consumer_key = result[0][2]
             consumer_secret = result[0][3]
-            trends, url, volume = get_trends(consumer_key, consumer_secret)
+            for i in range(len(pycountry.countries)):
+                country_list.append(list(pycountry.countries)[i].name.lower())
+            country_list.append("worldwide")
+            place = st.selectbox(
+                "Which country trends do you want to know?",
+                options=country_list,
+                index=len(country_list) - 1,
+            )
+            if place == "worldwide":
+                woeid = 1
+                trends, url, volume = get_trends(consumer_key, consumer_secret, woeid)
+            else:
+                geo_location = geocoder.osm(place)
+                trends, url, volume = get_trends(
+                    consumer_key, consumer_secret, geo_location
+                )
             trend_dict = {
                 "Trending Topics": trends,
                 "Tweet Volume": volume,
@@ -114,7 +133,8 @@ elif choice == "Log In":
             st.sidebar.title("Twitter Analytics option")
             extract_box = st.sidebar.checkbox("Extract Tweets")
             analyse_box = st.sidebar.checkbox("Analyse Custom Query")
-
+            if extract_box:
+                extract_box = True
             if extract_box:
 
                 """## Tweets search Information """
@@ -125,7 +145,7 @@ elif choice == "Log In":
                 until_query = ""
                 words = st.text_input(
                     "Keywords/Hashtags/Usernames for twitter search *",
-                    "Ex: Keyword OR #Keyword OR @Keyword ...",
+                    "",
                 )
                 if words:
                     keyword_query = words
@@ -150,26 +170,26 @@ elif choice == "Log In":
                     "Enter the number of tweets to be extracted (if not given default Max 15000) *",
                     value="15000",
                 )
-                # since_id = st.text_input("Extract tweets above this specific tweet id")
-                # filter = st.text_input(
-                #     "Enter any filter to be added for the search query"
-                # )
+                since_id = st.text_input("Extract tweets above this specific tweet id")
+                filter = st.text_input(
+                    "Enter any filter to be added for the search query"
+                )
                 extract = st.button("Extract tweets")
-                search_query = keyword_query + lang_query + since_query + until_query
+                # search_query = keyword_query + lang_query + since_query + until_query
                 if extract:
                     auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
                     api = tweepy.API(auth)
                     """ ### Extracting... """
-                    # tweets_csv_file = scrape(
-                    #     api,
-                    #     words,
-                    #     int(numtweet),
-                    #     since_id,
-                    #     date_since,
-                    #     until_date,
-                    #     lang,
-                    # )
-                    tweets_csv_file = snscrape_func(search_query, int(numtweet))
+                    tweets_csv_file = scrape(
+                        api,
+                        words,
+                        int(numtweet),
+                        since_id,
+                        date_since,
+                        date_untill,
+                        lang,
+                    )
+                    # tweets_csv_file = snscrape_func(search_query, int(numtweet))
                     b64 = base64.b64encode(
                         tweets_csv_file.encode()
                     ).decode()  # some strings <-> bytes conversions necessary here
@@ -213,7 +233,7 @@ elif choice == "Log In":
                     tweet_df = read_tweets_csv(dataset_file)
 
                     st.write("The intial dataset")
-                    st.write(tweet_df)
+                    st.dataframe(tweet_df)
 
                     """# Data Cleaning"""
 
@@ -229,8 +249,8 @@ elif choice == "Log In":
                     )
 
                     st.write("The cleaned dataset")
-                    st.write(tweet_df)
-                    plot_df = st.write()
+                    st.dataframe(tweet_df)
+                    st.write("Understanding dataset")
 
                     """# Exploratory Data Analysis"""
                     if "Meta Data Analysis" in basic_analysis:
@@ -390,310 +410,317 @@ elif choice == "Log In":
                             + keyword_used,
                             most_common_n=30,
                         )
+                    if (
+                        "Sentiment Wordclouds" in sentiment_analysis
+                        or "Sentiment Analysis" in sentiment_analysis
+                    ):
+                        if english:
 
-                    if english:
+                            if "sentiment" in tweet_df:
+                                pass
+                            else:
+                                st.write(
+                                    "It might take several minutes to analyse the sentiments..."
+                                )
+                                tweet_df = english_sentiments(tweet_df)
+                                st.write("Sentiment Analysis Done on the tweets")
+                                st.write(tweet_df)
+                                b64 = base64.b64encode(
+                                    tweet_df.to_csv().encode()
+                                ).decode()  # some strings <-> bytes conversions necessary here
+                                """ ## Click the link below to download the Extracted tweets """
+                                href = f'<a href="data:file/csv;base64,{b64}" download="extracted_tweets.csv">Download Tweets dataset with Sentiments CSV File for faster next time usage</a> (right-click and save as &lt;some_name&gt;.csv)'
+                                st.markdown(href, unsafe_allow_html=True)
 
-                        if "sentiment" in tweet_df:
-                            pass
-                        else:
-                            st.write(
-                                "It might take several minutes to analyse the sentiments..."
-                            )
-                            tweet_df = english_sentiments(tweet_df)
-                            st.write("Sentiment Analysis Done on the tweets")
-                            st.write(tweet_df)
-                            b64 = base64.b64encode(
-                                tweet_df.to_csv().encode()
-                            ).decode()  # some strings <-> bytes conversions necessary here
-                            """ ## Click the link below to download the Extracted tweets """
-                            href = f'<a href="data:file/csv;base64,{b64}" download="extracted_tweets.csv">Download Tweets dataset with Sentiments CSV File for faster next time usage</a> (right-click and save as &lt;some_name&gt;.csv)'
-                            st.markdown(href, unsafe_allow_html=True)
+                        if german:
+                            if "sentiment" in tweet_df:
+                                pass
+                            else:
+                                """## German sentiment Analysis"""
+                                st.write(
+                                    "It might take several minutes to analyse the sentiments..."
+                                )
+                                tweet_df = german_sentiment_analysis(tweet_df)
+                                st.write("Sentiment Analysis Done on the tweets")
+                                st.write(tweet_df)
+                                b64 = base64.b64encode(
+                                    tweet_df.to_csv().encode()
+                                ).decode()  # some strings <-> bytes conversions necessary here
+                                """ ## Click the link below to download the Extracted tweets """
+                                href = f'<a href="data:file/csv;base64,{b64}" download="extracted_tweets.csv">Download Tweets dataset with Sentiments CSV File for faster next time usage</a> (right-click and save as &lt;some_name&gt;.csv)'
+                                st.markdown(href, unsafe_allow_html=True)
 
-                    if german:
-                        if "sentiment" in tweet_df:
-                            pass
-                        else:
-                            """## German sentiment Analysis"""
-                            st.write(
-                                "It might take several minutes to analyse the sentiments..."
-                            )
-                            tweet_df = german_sentiment_analysis(tweet_df)
-                            st.write("Sentiment Analysis Done on the tweets")
-                            st.write(tweet_df)
-                            b64 = base64.b64encode(
-                                tweet_df.to_csv().encode()
-                            ).decode()  # some strings <-> bytes conversions necessary here
-                            """ ## Click the link below to download the Extracted tweets """
-                            href = f'<a href="data:file/csv;base64,{b64}" download="extracted_tweets.csv">Download Tweets dataset with Sentiments CSV File for faster next time usage</a> (right-click and save as &lt;some_name&gt;.csv)'
-                            st.markdown(href, unsafe_allow_html=True)
+                        """## Sentiment count plot"""
 
-                    """## Sentiment count plot"""
-
-                    fig, ax = plt.subplots()
-                    fig.set_size_inches(10, 8)
-                    sns.countplot(
-                        x=tweet_df["sentiment"], palette="Set3", linewidth=0.5
-                    )
-                    plt.title("Sentiments of tweets for keywords " + keyword_used)
-                    st.pyplot(fig)
-                    plt.close()
-
-                    # Create sentiment based tweets list
-
-                    pos = []
-                    neg = []
-                    neu = []
-                    for _, row in tweet_df.iterrows():
-                        if row["sentiment"] == "positive":
-                            pos.append(row["Clean Tweet"])
-                        elif row["sentiment"] == "negative":
-                            neg.append(row["Clean Tweet"])
-                        elif row["sentiment"] == "neutral":
-                            neu.append(row["Clean Tweet"])
-
-                    """## Sentiment wordcloud"""
-
-                    """### Positive Wordcloud"""
-
-                    masked_worldcloud_generate(
-                        list_data=pos,
-                        file_path="icons/thumbs-up-solid.png",
-                        background="black",
-                        color=color_dark28,
-                        title="Positive sentiment word cloud on tweets",
-                        font_path="font/BebasNeue-Regular.ttf",
-                    )
-
-                    """### Negative wordcloud - Masked"""
-
-                    masked_worldcloud_generate(
-                        list_data=neg,
-                        file_path="icons/thumbs-down-solid.png",
-                        background="black",
-                        color=grey_color_func,
-                        title="Negative sentiment word cloud on tweets",
-                        font_path="font/BebasNeue-Regular.ttf",
-                    )
-
-                    """### Neutral Wordcloud - Masked"""
-
-                    masked_worldcloud_generate(
-                        list_data=neu,
-                        file_path="icons/user-alt-solid.png",
-                        background="black",
-                        color=grey_color_func,
-                        title="Neutral sentiment word cloud on tweets",
-                        font_path="font/BebasNeue-Regular.ttf",
-                    )
-
-                    """## Polarity of the tweets"""
-                    polarity_plot(tweet_df, "Polarity of the tweets")
-                    """## Tweet counts on the given dates"""
-
-                    tweets_on_dates(tweet_df, "Tweet counts based on Dates")
-
-                    # """## Sentiments on the given dates"""
-
-                    # sentiments_on_dates(tweet_df, "Sentiments based on Dates")
-
-                    """## Overall Hashtags and Username """
-
-                    HT_list, UN_list = list_hashtags_usernames(tweet_df)
-
-                    """### Hashtag wordcloud"""
-
-                    masked_worldcloud_generate(
-                        list_data=HT_list,
-                        file_path="icons/hashtag-solid.png",
-                        background="black",
-                        color=color_dark28,
-                        title="Word cloud for Hashtags used in tweets",
-                        font_path="font/BebasNeue-Regular.ttf",
-                    )
-
-                    """### Username wordcloud"""
-
-                    masked_worldcloud_generate(
-                        list_data=UN_list,
-                        file_path="icons/at-solid.png",
-                        background="black",
-                        color=color_dark28,
-                        title="Word cloud for Usernames used in tweets",
-                        font_path="font/BebasNeue-Regular.ttf",
-                    )
-
-                    """## Hashtags , Usernames , Retweets based on sentiments"""
-
-                    (
-                        HT_positive,
-                        HT_negative,
-                        HT_neutral,
-                        UN_positive,
-                        UN_negative,
-                        UN_neutral,
-                        positive_retweets,
-                        negative_retweets,
-                        neutral_retweets,
-                    ) = sentiment_hashtags_usernames(tweet_df)
-
-                    """ ### Top 20 Hastags Overall """
-
-                    common_hashtags = set(HT_positive + HT_neutral + HT_negative)
-
-                    plot_freq_dist(HT_list, "Top 20 Hashtags used on the tweets", n=20)
-
-                    """ ### Top 20 Hastags used on Positive tweets """
-                    plot_freq_dist(
-                        HT_positive,
-                        "Top 20 Hashtags used on Positive sentiments",
-                        n=20,
-                    )
-
-                    """ ### Top 20 Hastags used on Neutral tweets """
-                    plot_freq_dist(
-                        HT_neutral,
-                        "Top 20 Hashtags used on Neutral sentiments",
-                        n=20,
-                    )
-                    """ ### Top 20 Hastags used on Negative tweets """
-                    plot_freq_dist(
-                        HT_negative,
-                        "Top 20 Hashtags used on Negative sentiments",
-                        n=20,
-                    )
-                    """ ### Total Hastags count on tweets """
-                    plot_hash_user_count(
-                        HT_list,
-                        HT_positive,
-                        HT_neutral,
-                        HT_negative,
-                        common_hashtags,
-                        "Counts of the hashtags used in the Tweets",
-                    )
-                    """ ### Common Hashtags found on tweets with all sentiments """
-                    masked_worldcloud_generate(
-                        common_hashtags,
-                        file_path="icons/slack-hash-brands.png",
-                        font_path="font/BebasNeue-Regular.ttf",
-                        background="black",
-                        title="Common Hshtags on all the sentiments",
-                        color=grey_color_func,
-                    )
-
-                    """ ### Top 20 Usernames Overall """
-                    common_usernames = set(UN_positive + UN_neutral + UN_negative)
-
-                    plot_freq_dist(
-                        UN_list,
-                        "Top 20 Usernames used on the tweets",
-                        n=20,
-                    )
-                    """ ### Top 20 Usernames used on Positive tweets """
-                    plot_freq_dist(
-                        UN_positive,
-                        "Top 20 Usernames used on Positive sentiments",
-                        n=20,
-                    )
-
-                    """ ### Top 20 Usernames used on Neutral tweets """
-                    plot_freq_dist(
-                        UN_neutral,
-                        "Top 20 Usernames used on Neutral sentiments",
-                        n=20,
-                    )
-                    """ ### Top 20 Usernames used on Negative tweets """
-                    plot_freq_dist(
-                        UN_negative,
-                        "Top 20 Usernames used on Negative sentiments",
-                        n=20,
-                    )
-                    """ ### Total Usernames count on tweets """
-                    plot_hash_user_count(
-                        UN_list,
-                        UN_positive,
-                        UN_neutral,
-                        UN_negative,
-                        common_usernames,
-                        "Counts of the Usernames in Tweets",
-                    )
-                    """ ### Common Hashtags found on tweets with all sentiments """
-                    masked_worldcloud_generate(
-                        common_usernames,
-                        file_path="icons/at-solid.png",
-                        font_path="font/BebasNeue-Regular.ttf",
-                        background="black",
-                        title="Common Usernames on all the sentiments",
-                        color=grey_color_func,
-                    )
-                    """### Tweet unigrams on sentiments"""
-                    bm25_sentiments_html = scatterplot_sentiment_bm25_visualisation(
-                        tweet_df
-                    )
-                    components.html(bm25_sentiments_html, height=1000, scrolling=True)
-
-                    """### Tweet phrases on sentiments"""
-                    sentiments_phrase_html = (
-                        scatterplot_sentiment_log_scale_phrase_plot(tweet_df)
-                    )
-                    components.html(sentiments_phrase_html, height=1000, scrolling=True)
-
-                    """### Tweet retweet counts based on sentiments"""
-
-                    plot_retweet_count(
-                        negative_retweets,
-                        "Tweets with Negative sentiment Retweet counts",
-                    )
-
-                    plot_retweet_count(
-                        positive_retweets,
-                        "Tweets with Positive sentiment Retweet counts",
-                    )
-
-                    plot_retweet_count(
-                        neutral_retweets,
-                        "Tweets with Neutral sentiment Retweet counts",
-                    )
-
-                    """## User followers plot"""
-
-                    user_df = tweet_df.sort_values(
-                        by=["followers", "username"], ascending=False
-                    )
-                    followers_list = list(user_df["followers"].iloc[:30])
-                    username_list = list(user_df["username"].iloc[:30])
-                    sentiments_list = list(user_df["sentiment"].iloc[:100])
-                    colours = []
-                    for i in sentiments_list:
-                        if i == "positive":
-                            colours.append("green")
-                        elif i == "neutral":
-                            colours.append("gray")
-                        else:
-                            colours.append("red")
-
-                    fig = plt.figure(figsize=(20, 10))
-                    ax = sns.barplot(x=username_list, y=followers_list)
-                    plt.title("Top users with highest following")
-                    plt.ticklabel_format(style="plain", axis="y")
-                    plt.ylabel("Followers")
-                    plt.xlabel("Usernames")
-                    plt.xticks(rotation=45)
-                    st.pyplot(fig)
-
-                    if english:
-                        """## Sentiment Topic Analysis"""
-                        sentiment_topic_html = sentiment_topic_analysis(tweet_df)
-                        components.html(
-                            sentiment_topic_html, height=1000, scrolling=True
+                        fig, ax = plt.subplots()
+                        fig.set_size_inches(10, 8)
+                        sns.countplot(
+                            x=tweet_df["sentiment"], palette="Set3", linewidth=0.5
                         )
+                        plt.title("Sentiments of tweets for keywords " + keyword_used)
+                        st.pyplot(fig)
+                        plt.close()
+
+                        # Create sentiment based tweets list
+
+                        pos = []
+                        neg = []
+                        neu = []
+                        for _, row in tweet_df.iterrows():
+                            if row["sentiment"] == "positive":
+                                pos.append(row["Clean Tweet"])
+                            elif row["sentiment"] == "negative":
+                                neg.append(row["Clean Tweet"])
+                            elif row["sentiment"] == "neutral":
+                                neu.append(row["Clean Tweet"])
+
+                        """## Sentiment wordcloud"""
+                        if "Sentiment Wordclouds" in sentiment_analysis:
+                            """### Positive Wordcloud"""
+
+                            masked_worldcloud_generate(
+                                list_data=pos,
+                                file_path="icons/thumbs-up-solid.png",
+                                background="black",
+                                color=color_dark28,
+                                title="Positive sentiment word cloud on tweets",
+                                font_path="font/BebasNeue-Regular.ttf",
+                            )
+
+                            """### Negative wordcloud - Masked"""
+
+                            masked_worldcloud_generate(
+                                list_data=neg,
+                                file_path="icons/thumbs-down-solid.png",
+                                background="black",
+                                color=grey_color_func,
+                                title="Negative sentiment word cloud on tweets",
+                                font_path="font/BebasNeue-Regular.ttf",
+                            )
+
+                            """### Neutral Wordcloud - Masked"""
+
+                            masked_worldcloud_generate(
+                                list_data=neu,
+                                file_path="icons/user-alt-solid.png",
+                                background="black",
+                                color=grey_color_func,
+                                title="Neutral sentiment word cloud on tweets",
+                                font_path="font/BebasNeue-Regular.ttf",
+                            )
+
+                        """## Polarity of the tweets"""
+                        polarity_plot(tweet_df, "Polarity of the tweets")
+                        """## Tweet counts on the given dates"""
+
+                        tweets_on_dates(tweet_df, "Tweet counts based on Dates")
+
+                        # """## Sentiments on the given dates"""
+
+                        # sentiments_on_dates(tweet_df, "Sentiments based on Dates")
+
+                        """## Overall Hashtags and Username """
+
+                        HT_list, UN_list = list_hashtags_usernames(tweet_df)
+
+                        """### Hashtag wordcloud"""
+
+                        masked_worldcloud_generate(
+                            list_data=HT_list,
+                            file_path="icons/hashtag-solid.png",
+                            background="black",
+                            color=color_dark28,
+                            title="Word cloud for Hashtags used in tweets",
+                            font_path="font/BebasNeue-Regular.ttf",
+                        )
+
+                        """### Username wordcloud"""
+
+                        masked_worldcloud_generate(
+                            list_data=UN_list,
+                            file_path="icons/at-solid.png",
+                            background="black",
+                            color=color_dark28,
+                            title="Word cloud for Usernames used in tweets",
+                            font_path="font/BebasNeue-Regular.ttf",
+                        )
+
+                        """## Hashtags , Usernames , Retweets based on sentiments"""
+
+                        (
+                            HT_positive,
+                            HT_negative,
+                            HT_neutral,
+                            UN_positive,
+                            UN_negative,
+                            UN_neutral,
+                            positive_retweets,
+                            negative_retweets,
+                            neutral_retweets,
+                        ) = sentiment_hashtags_usernames(tweet_df)
+
+                        """ ### Top 20 Hastags Overall """
+
+                        common_hashtags = set(HT_positive + HT_neutral + HT_negative)
+
+                        plot_freq_dist(
+                            HT_list, "Top 20 Hashtags used on the tweets", n=20
+                        )
+
+                        """ ### Top 20 Hastags used on Positive tweets """
+                        plot_freq_dist(
+                            HT_positive,
+                            "Top 20 Hashtags used on Positive sentiments",
+                            n=20,
+                        )
+
+                        """ ### Top 20 Hastags used on Neutral tweets """
+                        plot_freq_dist(
+                            HT_neutral,
+                            "Top 20 Hashtags used on Neutral sentiments",
+                            n=20,
+                        )
+                        """ ### Top 20 Hastags used on Negative tweets """
+                        plot_freq_dist(
+                            HT_negative,
+                            "Top 20 Hashtags used on Negative sentiments",
+                            n=20,
+                        )
+                        """ ### Total Hastags count on tweets """
+                        plot_hash_user_count(
+                            HT_list,
+                            HT_positive,
+                            HT_neutral,
+                            HT_negative,
+                            common_hashtags,
+                            "Counts of the hashtags used in the Tweets",
+                        )
+                        """ ### Common Hashtags found on tweets with all sentiments """
+                        masked_worldcloud_generate(
+                            common_hashtags,
+                            file_path="icons/slack-hash-brands.png",
+                            font_path="font/BebasNeue-Regular.ttf",
+                            background="black",
+                            title="Common Hshtags on all the sentiments",
+                            color=grey_color_func,
+                        )
+
+                        """ ### Top 20 Usernames Overall """
+                        common_usernames = set(UN_positive + UN_neutral + UN_negative)
+
+                        plot_freq_dist(
+                            UN_list,
+                            "Top 20 Usernames used on the tweets",
+                            n=20,
+                        )
+                        """ ### Top 20 Usernames used on Positive tweets """
+                        plot_freq_dist(
+                            UN_positive,
+                            "Top 20 Usernames used on Positive sentiments",
+                            n=20,
+                        )
+
+                        """ ### Top 20 Usernames used on Neutral tweets """
+                        plot_freq_dist(
+                            UN_neutral,
+                            "Top 20 Usernames used on Neutral sentiments",
+                            n=20,
+                        )
+                        """ ### Top 20 Usernames used on Negative tweets """
+                        plot_freq_dist(
+                            UN_negative,
+                            "Top 20 Usernames used on Negative sentiments",
+                            n=20,
+                        )
+                        """ ### Total Usernames count on tweets """
+                        plot_hash_user_count(
+                            UN_list,
+                            UN_positive,
+                            UN_neutral,
+                            UN_negative,
+                            common_usernames,
+                            "Counts of the Usernames in Tweets",
+                        )
+                        """ ### Common Hashtags found on tweets with all sentiments """
+                        masked_worldcloud_generate(
+                            common_usernames,
+                            file_path="icons/at-solid.png",
+                            font_path="font/BebasNeue-Regular.ttf",
+                            background="black",
+                            title="Common Usernames on all the sentiments",
+                            color=grey_color_func,
+                        )
+                        """### Tweet unigrams on sentiments"""
+                        bm25_sentiments_html = scatterplot_sentiment_bm25_visualisation(
+                            tweet_df
+                        )
+                        components.html(
+                            bm25_sentiments_html, height=1000, scrolling=True
+                        )
+
+                        """### Tweet phrases on sentiments"""
+                        sentiments_phrase_html = (
+                            scatterplot_sentiment_log_scale_phrase_plot(tweet_df)
+                        )
+                        components.html(
+                            sentiments_phrase_html, height=1000, scrolling=True
+                        )
+
+                        """### Tweet retweet counts based on sentiments"""
+
+                        plot_retweet_count(
+                            negative_retweets,
+                            "Tweets with Negative sentiment Retweet counts",
+                        )
+
+                        plot_retweet_count(
+                            positive_retweets,
+                            "Tweets with Positive sentiment Retweet counts",
+                        )
+
+                        plot_retweet_count(
+                            neutral_retweets,
+                            "Tweets with Neutral sentiment Retweet counts",
+                        )
+
+                        """## User followers plot"""
+
+                        user_df = tweet_df.sort_values(
+                            by=["followers", "username"], ascending=False
+                        )
+                        followers_list = list(user_df["followers"].iloc[:30])
+                        username_list = list(user_df["username"].iloc[:30])
+                        sentiments_list = list(user_df["sentiment"].iloc[:100])
+                        colours = []
+                        for i in sentiments_list:
+                            if i == "positive":
+                                colours.append("green")
+                            elif i == "neutral":
+                                colours.append("gray")
+                            else:
+                                colours.append("red")
+
+                        fig = plt.figure(figsize=(20, 10))
+                        ax = sns.barplot(x=username_list, y=followers_list)
+                        plt.title("Top users with highest following")
+                        plt.ticklabel_format(style="plain", axis="y")
+                        plt.ylabel("Followers")
+                        plt.xlabel("Usernames")
+                        plt.xticks(rotation=45)
+                        st.pyplot(fig)
+
+                        if english:
+                            """## Sentiment Topic Analysis"""
+                            sentiment_topic_html = sentiment_topic_analysis(tweet_df)
+                            components.html(
+                                sentiment_topic_html, height=1000, scrolling=True
+                            )
 
         else:
             st.warning("Incorrect Username/Password")
 elif choice == "Sign Up":
 
     # st.sidebar.warning("Currently SignUp option is disabled. Coming Soon")
-
-    st.image("images/tt_cover.jpg")
 
     """
     # Twitter Treasures

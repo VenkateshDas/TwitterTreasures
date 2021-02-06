@@ -27,7 +27,8 @@ from nltk.tokenize import wordpunct_tokenize
 from nltk.corpus import stopwords
 from nltk.probability import FreqDist
 from streamlit_disqus import st_disqus
-
+import geocoder
+import pycountry
 
 # from germansentiment import SentimentModel
 from PIL import Image
@@ -113,6 +114,7 @@ def add_userdata(username, password, consumer_key, consumer_secret):
     conn.commit()
 
 
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def login_user(username, password):
     c.execute(
         "SELECT * FROM userstable WHERE username =? AND password = ?",
@@ -128,6 +130,7 @@ def view_all_users():
     return data
 
 
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def snscrape_func(search_query, num_tweet):
     st.write(search_query)
     columns = [
@@ -174,6 +177,7 @@ def snscrape_func(search_query, num_tweet):
 
 
 # function to perform data extraction
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def scrape(api, words, numtweet, since_id, date_since, until_date, lang):
 
     # tweet_progress = st.progress(0)
@@ -267,6 +271,7 @@ def scrape(api, words, numtweet, since_id, date_since, until_date, lang):
         return tweets_csv_file
 
 
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def read_tweets_csv(file_path):
     df = pd.read_csv(file_path)
     df.drop(["Unnamed: 0"], axis=1, inplace=True)
@@ -274,11 +279,13 @@ def read_tweets_csv(file_path):
     return df
 
 
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def extract_hashtag(input_text):
     hashtags = re.findall(r"#[\w]*", str(input_text))
     return hashtags
 
 
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def extract_username(input_text):
     usernames = re.findall(r"@[\w]*", str(input_text))
     return usernames
@@ -289,6 +296,7 @@ def remove_urls(s):
     return re.sub(r"https?://\S+", "", s)
 
 
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def clean_txt(input_text):
     input_text = str(input_text)
     if type(input_text) != str:
@@ -527,6 +535,7 @@ def divide_chunks(l, n):
 from collections import Counter
 
 
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def polarity_plot(df, title):
     length = df.shape[0]
     if length < 500:
@@ -545,6 +554,7 @@ def polarity_plot(df, title):
         plt.close()
 
 
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def tweets_on_dates(df, title):
 
     st.write("If it is a large dataset, only a sample is shown in the graph")
@@ -709,6 +719,7 @@ def plot_retweet_count(x_value, title):
     plt.close()
 
 
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def sentiment_scores(text):
     analysis = TextBlob(text, analyzer=NaiveBayesAnalyzer()).sentiment
 
@@ -747,6 +758,7 @@ def english_sentiments(df):
     return df
 
 
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def german_sentiment_analysis(df):
 
     st.write("Using Textblob DE")
@@ -760,6 +772,7 @@ def german_sentiment_analysis(df):
     return df
 
 
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def scatterplot_sentiment_log_scale_phrase_plot(df):
 
     corpus = sctxt.CorpusFromPandas(
@@ -783,6 +796,7 @@ def scatterplot_sentiment_log_scale_phrase_plot(df):
     return html
 
 
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def scatterplot_sentiment_bm25_visualisation(df):
 
     corpus = (
@@ -846,10 +860,15 @@ def sentiment_topic_analysis(df):
     return html
 
 
-def get_trends(consumer_key, consumer_secret):
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
+def get_trends(consumer_key, consumer_secret, place):
     auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
     api = tweepy.API(auth)
-    trends1 = api.trends_place(1)
+    if place == 1:
+        trends1 = api.trends_place(1)
+    else:
+        closest_loc = api.trends_closest(place.lat, place.lng)
+        trends1 = api.trends_place(closest_loc[0]["woeid"])
     data = trends1[0]
     trends = data["trends"]
     names = [trend_name["name"] for trend_name in trends]
