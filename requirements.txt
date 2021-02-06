@@ -25,7 +25,6 @@ decorator==4.4.2
 defusedxml==0.6.0
 docopt==0.6.2
 empath==0.89
-en-core-web-sm==3.0.0a0
 entrypoints==0.3
 flashtext==2.7
 gitdb==4.0.5
