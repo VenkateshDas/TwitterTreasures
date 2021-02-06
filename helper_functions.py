@@ -8,6 +8,11 @@ import numpy as np
 import seaborn as sns
 import spacy
 import en_core_web_sm
+import snscrape.modules.twitter as sntwitter
+
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
 
 # from tqdm.notebook import tqdm
 import nltk
@@ -33,6 +38,9 @@ from collections import Counter
 from palettable.colorbrewer.qualitative import Dark2_8
 from palettable import cubehelix
 from matplotlib import cm
+from collections import Counter
+import matplotlib.dates as mdates
+from matplotlib.dates import DateFormatter
 
 # from transformers import *
 import streamlit as st
@@ -53,6 +61,7 @@ import hashlib
 import sqlite3
 
 from streamlit_disqus import st_disqus
+
 
 conn = sqlite3.connect("user_data.db", check_same_thread=False)
 c = conn.cursor()
@@ -117,6 +126,51 @@ def view_all_users():
     c.execute("SELECT * FROM userstable")
     data = c.fetchall()
     return data
+
+
+def snscrape_func(search_query, num_tweet):
+    st.write(search_query)
+    columns = [
+        "id",
+        "source",
+        "language",
+        "date",
+        "username",
+        "name",
+        "description",
+        "location",
+        "text",
+        "following",
+        "followers",
+        "retweetcount",
+    ]
+    tweets_list = []
+    # Using TwitterSearchScraper to scrape data and append tweets to list
+    for i, tweet in enumerate(sntwitter.TwitterSearchScraper(search_query).get_items()):
+        if i > num_tweet:
+            break
+        tweets_list.append(
+            [
+                tweet.id,
+                tweet.sourceLabel,
+                tweet.lang,
+                tweet.date,
+                tweet.user.username,
+                tweet.user.displayname,
+                tweet.user.rawDescription,
+                tweet.user.location,
+                tweet.content,
+                tweet.user.friendsCount,
+                tweet.user.followersCount,
+                tweet.retweetCount,
+            ]
+        )
+
+    # Creating a dataframe from the tweets list above
+    tweets_df = pd.DataFrame(tweets_list, columns=columns)
+    st.dataframe(tweets_df)
+    tweets_csv_file = tweets_df.to_csv(index=True)
+    return tweets_csv_file
 
 
 # function to perform data extraction
@@ -216,7 +270,7 @@ def scrape(api, words, numtweet, since_id, date_since, until_date, lang):
 def read_tweets_csv(file_path):
     df = pd.read_csv(file_path)
     df.drop(["Unnamed: 0"], axis=1, inplace=True)
-    df["date"] = pd.to_datetime(df["date"])
+    df["date"] = pd.to_datetime(df["date"], errors="coerce")
     return df
 
 
@@ -470,13 +524,56 @@ def divide_chunks(l, n):
 
 # Date based sentiments
 
+from collections import Counter
+
+
+def polarity_plot(df, title):
+    length = df.shape[0]
+    if length < 500:
+        fig, ax = plt.subplots()
+        g = sns.barplot(x=df.index.values, y="Polarity", data=df, palette="rocket")
+        plt.title(title)
+        st.pyplot(fig)
+        plt.close()
+    else:
+        st.write("If it is a large dataset, only a sample is shown in the graph")
+        df = df.sample(500, random_state=2)
+        fig, ax = plt.subplots()
+        g = sns.barplot(x=df.index.values, y="Polarity", data=df, palette="rocket")
+        plt.title(title)
+        st.pyplot(fig)
+        plt.close()
+
 
 def tweets_on_dates(df, title):
-    fig, ax = plt.subplots()
-    fig.set_size_inches(11.7, 8.27)
-    g = sns.countplot(df["date"].dt.date, palette="Set3", linewidth=0.5)
+
+    st.write("If it is a large dataset, only a sample is shown in the graph")
+
+    date_list = []
+    count_list = []
+    length = df.shape[0]
+    dates = df["date"].dt.date
+    tweet_count = Counter(list(dates))
+    for i, v in tweet_count.items():
+        date_list.append(i)
+        count_list.append(v)
+    # Create figure and plot space
+    fig, ax = plt.subplots(figsize=(12, 12))
+
+    # Add x-axis and y-axis
+    value = int(len(date_list) / 4)
+    ax.bar(date_list[:value], count_list[:value])
+
+    # Set title and labels for axes
+    ax.set(xlabel="Date", ylabel="Counts", title=title)
+
     plt.xticks(rotation=90)
-    plt.title(title)
+    # Define the date format
+    date_form = DateFormatter("%m-%y")
+    ax.xaxis.set_major_formatter(date_form)
+
+    # Ensure a major tick for each week using (interval=1)
+    ax.xaxis.set_major_locator(mdates.WeekdayLocator(interval=2))
     st.pyplot(fig)
     plt.close()
 
@@ -759,4 +856,3 @@ def get_trends(consumer_key, consumer_secret):
     url = [trend_url["url"] for trend_url in trends]
     volume = [trend_volume["tweet_volume"] for trend_volume in trends]
     return names, url, volume
-

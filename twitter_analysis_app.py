@@ -17,22 +17,21 @@ st.sidebar.image(
     "images/digital-futuristic-analytics-hologram-working-character-vector-design-illustration_41742-66.jpg",
     width=300,
 )
-
+st.image("images/tt_cover.jpg", width=750)
 menu = ["Home", "Log In", "Sign Up"]
 choice = st.sidebar.selectbox("Menu", menu)
 
-
 if choice == "Home":
-    st.image("images/tt_cover.jpg", width=750)
 
     """
     # Twitter Treasures
+    Developed by [Venkatesh Murugadas](https://www.linkedin.com/in/venkateshmurugadas/)
     ### Create your story with DATA...
     """
     st.write(
         """This is a basic twitter data analysis web app. It is a **proof of concept** and **not optimised for any real time commercial application or insights**. If you encounter any
         any inconsistency or error during the runtime, please get back to us with the error and the dataset so that it can be reproduced and solved.
-        Use the Disqus form to submit the error message or send us a mail at **feedback.twittertreasures@gmail.com** for anything more.
+        Use the Disqus form to submit the error message or send me a mail at **feedback.twittertreasures@gmail.com** for anything more.
 
         If you want to just have fun with twitter data, choose a Trending Topic and start your analysis and find something interesting! .
         """
@@ -55,9 +54,6 @@ if choice == "Home":
     """
 
 elif choice == "Log In":
-
-    st.image("images/tt_cover.jpg")
-
     """
     # Twitter Treasures
     ### Create your story with DATA...
@@ -66,9 +62,10 @@ elif choice == "Log In":
         """This is a basic twitter data analysis web app. It is a **proof of concept** and **not optimised for any real time commercial application or insights**. If you encounter any
         any inconsistency or error during the runtime, please get back to us with the error and the dataset so that it can be reproduced and solved.
         Use the Disqus form to submit the error message or send us a mail at **feedback.twittertreasures@gmail.com** for anything more.
+        This app is not optimised to extract and analyse more than 2000 tweets. If it exceeds you might experience slower performance.
         """
     )
-
+    st.image("images/how_to_start.png", width=800)
     st.sidebar.subheader("""Login Section""")
 
     username = st.sidebar.text_input("User Name")
@@ -121,41 +118,57 @@ elif choice == "Log In":
 
                 """## Tweets search Information """
                 st.write("Fill labels with '*', if confused.")
+                keyword_query = ""
+                lang_query = ""
+                since_query = ""
+                until_query = ""
                 words = st.text_input(
                     "Keywords/Hashtags/Usernames for twitter search *",
                     "Ex: Keyword OR #Keyword OR @Keyword ...",
                 )
-                lang = st.selectbox(
-                    "Select the language of the tweets to extract", ("en", "de", "any")
+                if words:
+                    keyword_query = words
+                lang = st.text_input(
+                    "Select the language of the tweets to extract", value="en"
                 )
-                if lang == "any":
-                    lang = ""
+                if lang:
+                    lang_query = " lang:" + lang
                 date_since = st.text_input(
                     "Extract tweets since (Format yyyy-mm-dd) * Recent search API allows only to get tweets of the previous 7 days",
-                    value="2021-01-26",
+                    value="",
                 )
-                until_date = st.text_input(
+                if date_since:
+                    since_query = " since:" + date_since
+                date_untill = st.text_input(
                     "Extract tweets till (Format yyyy-mm-dd)", value=""
                 )
+                if date_untill:
+                    until_query = " until:" + date_untill
                 # number of tweets you want to extract in one run
-                numtweet = st.number_input(
-                    "Enter the number of tweets to be extracted (Max 15000) *"
+                numtweet = st.text_input(
+                    "Enter the number of tweets to be extracted (if not given default Max 15000) *",
+                    value="15000",
                 )
-                since_id = st.text_input("Extract tweets above this specific tweet id")
+                # since_id = st.text_input("Extract tweets above this specific tweet id")
+                # filter = st.text_input(
+                #     "Enter any filter to be added for the search query"
+                # )
                 extract = st.button("Extract tweets")
+                search_query = keyword_query + lang_query + since_query + until_query
                 if extract:
                     auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
                     api = tweepy.API(auth)
                     """ ### Extracting... """
-                    tweets_csv_file = scrape(
-                        api,
-                        words,
-                        int(numtweet),
-                        since_id,
-                        date_since,
-                        until_date,
-                        lang,
-                    )
+                    # tweets_csv_file = scrape(
+                    #     api,
+                    #     words,
+                    #     int(numtweet),
+                    #     since_id,
+                    #     date_since,
+                    #     until_date,
+                    #     lang,
+                    # )
+                    tweets_csv_file = snscrape_func(search_query, int(numtweet))
                     b64 = base64.b64encode(
                         tweets_csv_file.encode()
                     ).decode()  # some strings <-> bytes conversions necessary here
@@ -472,13 +485,15 @@ elif choice == "Log In":
                         font_path="font/BebasNeue-Regular.ttf",
                     )
 
+                    """## Polarity of the tweets"""
+                    polarity_plot(tweet_df, "Polarity of the tweets")
                     """## Tweet counts on the given dates"""
 
                     tweets_on_dates(tweet_df, "Tweet counts based on Dates")
 
-                    """## Sentiments on the given dates"""
+                    # """## Sentiments on the given dates"""
 
-                    sentiments_on_dates(tweet_df, "Sentiments based on Dates")
+                    # sentiments_on_dates(tweet_df, "Sentiments based on Dates")
 
                     """## Overall Hashtags and Username """
 
@@ -535,7 +550,9 @@ elif choice == "Log In":
 
                     """ ### Top 20 Hastags used on Neutral tweets """
                     plot_freq_dist(
-                        HT_neutral, "Top 20 Hashtags used on Neutral sentiments", n=20,
+                        HT_neutral,
+                        "Top 20 Hashtags used on Neutral sentiments",
+                        n=20,
                     )
                     """ ### Top 20 Hastags used on Negative tweets """
                     plot_freq_dist(
@@ -566,7 +583,9 @@ elif choice == "Log In":
                     common_usernames = set(UN_positive + UN_neutral + UN_negative)
 
                     plot_freq_dist(
-                        UN_list, "Top 20 Usernames used on the tweets", n=20,
+                        UN_list,
+                        "Top 20 Usernames used on the tweets",
+                        n=20,
                     )
                     """ ### Top 20 Usernames used on Positive tweets """
                     plot_freq_dist(
@@ -577,7 +596,9 @@ elif choice == "Log In":
 
                     """ ### Top 20 Usernames used on Neutral tweets """
                     plot_freq_dist(
-                        UN_neutral, "Top 20 Usernames used on Neutral sentiments", n=20,
+                        UN_neutral,
+                        "Top 20 Usernames used on Neutral sentiments",
+                        n=20,
                     )
                     """ ### Top 20 Usernames used on Negative tweets """
                     plot_freq_dist(
@@ -610,8 +631,8 @@ elif choice == "Log In":
                     components.html(bm25_sentiments_html, height=1000, scrolling=True)
 
                     """### Tweet phrases on sentiments"""
-                    sentiments_phrase_html = scatterplot_sentiment_log_scale_phrase_plot(
-                        tweet_df
+                    sentiments_phrase_html = (
+                        scatterplot_sentiment_log_scale_phrase_plot(tweet_df)
                     )
                     components.html(sentiments_phrase_html, height=1000, scrolling=True)
 
@@ -728,4 +749,3 @@ st_disqus(
     "https-twittertreasures-herokuapp-com",
     url="https://twittertreasures.herokuapp.com/",
 )
-
