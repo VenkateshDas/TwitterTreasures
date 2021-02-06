@@ -7,6 +7,7 @@ Original file is located at
 1. Data reading
 2. Data cleaning
 3. Data Exploration and visualisation
+4. Sentiment Analysis
 
 """
 ## Import necessary libraries and assign basic variables"""
@@ -24,7 +25,7 @@ choice = st.sidebar.selectbox("Menu", menu)
 if choice == "Home":
 
     """
-    # Twitter Treasures
+    # Lil Birdie...
     Developed by [Venkatesh Murugadas](https://www.linkedin.com/in/venkateshmurugadas/)
     ### Create your story with DATA...
     """
@@ -57,7 +58,7 @@ if choice == "Home":
 
 elif choice == "Log In":
     """
-    # Twitter Treasures
+    # Lil Birdie...
     ### Create your story with DATA...
     """
     st.write(
@@ -721,7 +722,7 @@ elif choice == "Sign Up":
     # st.sidebar.warning("Currently SignUp option is disabled. Coming Soon")
 
     """
-    # Twitter Treasures
+    # Lil Birdie...
     ### Create your story with DATA...
     """
     st.write(
@@ -753,7 +754,7 @@ elif choice == "Sign Up":
 
 elif choice == "Learn":
     """
-    # Twitter Treasures
+    # Lil Birdie...
     Developed by [Venkatesh Murugadas](https://www.linkedin.com/in/venkateshmurugadas/)
     ### Create your story with DATA...
     """
