@@ -1,12 +1,13 @@
+seaborn
 textblob==0.15.3
 textblob_de==0.4.3
 wordcloud==1.8.1
 palettable==3.3.0
 tweepy==3.10.0
 tqdm==4.56.0
-seaborn==0.9.0
 streamlit==0.75.0
 spacy==3.0.0
+en_core_web_sm == 3.0.0
 nltk==3.4
 streamlit_disqus==0.1.3
 scattertext==0.1.0.0
