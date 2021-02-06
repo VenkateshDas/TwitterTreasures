@@ -33,6 +33,7 @@ if choice == "Home":
         any inconsistency or error during the runtime, please get back to us with the error and the dataset so that it can be reproduced and solved.
         Use the Disqus form to submit the error message or send me a mail at **feedback.twittertreasures@gmail.com** for anything more.
         This app is not optimised to extract and analyse more than 2000 tweets. If it exceeds you might experience slower performance.
+        Only previous 7 days of data can be extracted from this version app. If you need historical tweets do contact me.
 
         If you want to just have fun with twitter data, choose a Trending Topic and start your analysis and find something interesting! .
         """
@@ -144,8 +145,7 @@ elif choice == "Log In":
                 since_query = ""
                 until_query = ""
                 words = st.text_input(
-                    "Keywords/Hashtags/Usernames for twitter search *",
-                    "",
+                    "Keywords/Hashtags/Usernames for twitter search *", "",
                 )
                 if words:
                     keyword_query = words
@@ -609,9 +609,7 @@ elif choice == "Log In":
                         common_usernames = set(UN_positive + UN_neutral + UN_negative)
 
                         plot_freq_dist(
-                            UN_list,
-                            "Top 20 Usernames used on the tweets",
-                            n=20,
+                            UN_list, "Top 20 Usernames used on the tweets", n=20,
                         )
                         """ ### Top 20 Usernames used on Positive tweets """
                         plot_freq_dist(
@@ -659,8 +657,8 @@ elif choice == "Log In":
                         )
 
                         """### Tweet phrases on sentiments"""
-                        sentiments_phrase_html = (
-                            scatterplot_sentiment_log_scale_phrase_plot(tweet_df)
+                        sentiments_phrase_html = scatterplot_sentiment_log_scale_phrase_plot(
+                            tweet_df
                         )
                         components.html(
                             sentiments_phrase_html, height=1000, scrolling=True
