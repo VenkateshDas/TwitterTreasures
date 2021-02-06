@@ -18,3 +18,4 @@ geocoder==1.38.1
 numpy==1.18.3
 Pillow==8.1.0
 vaderSentiment==3.3.2
+empath
