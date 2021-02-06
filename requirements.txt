@@ -104,7 +104,7 @@ six==1.15.0
 smart-open==3.0.0
 smmap==3.0.5
 soupsieve==2.1
-spacy==3.0.0a41
+spacy==3.0.0
 spacy-legacy==3.0.1
 srsly==2.4.0
 statsmodels==0.12.2
