@@ -136,3 +136,4 @@ webencodings==0.5.1
 widgetsnbextension==3.5.1
 wordcloud==1.8.1
 yarg==0.1.9
+git+https://github.com/JustAnotherArchivist/snscrape.git
