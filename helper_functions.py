@@ -177,7 +177,6 @@ def snscrape_func(search_query, num_tweet):
 
 
 # function to perform data extraction
-@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def scrape(api, words, numtweet, since_id, date_since, until_date, lang):
 
     # tweet_progress = st.progress(0)

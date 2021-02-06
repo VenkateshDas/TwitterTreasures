@@ -170,26 +170,26 @@ elif choice == "Log In":
                     "Enter the number of tweets to be extracted (if not given default Max 15000) *",
                     value="15000",
                 )
-                since_id = st.text_input("Extract tweets above this specific tweet id")
-                filter = st.text_input(
-                    "Enter any filter to be added for the search query"
-                )
+                # since_id = st.text_input("Extract tweets above this specific tweet id")
+                # filter = st.text_input(
+                #     "Enter any filter to be added for the search query"
+                # )
                 extract = st.button("Extract tweets")
-                # search_query = keyword_query + lang_query + since_query + until_query
+                search_query = keyword_query + lang_query + since_query + until_query
                 if extract:
                     auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
                     api = tweepy.API(auth)
                     """ ### Extracting... """
-                    tweets_csv_file = scrape(
-                        api,
-                        words,
-                        int(numtweet),
-                        since_id,
-                        date_since,
-                        date_untill,
-                        lang,
-                    )
-                    # tweets_csv_file = snscrape_func(search_query, int(numtweet))
+                    # tweets_csv_file = scrape(
+                    #     api,
+                    #     words,
+                    #     int(numtweet),
+                    #     since_id,
+                    #     date_since,
+                    #     until_date,
+                    #     lang,
+                    # )
+                    tweets_csv_file = snscrape_func(search_query, int(numtweet))
                     b64 = base64.b64encode(
                         tweets_csv_file.encode()
                     ).decode()  # some strings <-> bytes conversions necessary here
