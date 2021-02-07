@@ -1,6 +1,6 @@
 # [Twitter Treasures](https://bit.ly/36vRnGK)
 
-This repository contains the code base to extract tweets from Twitter using Twitter API , analyse and visualise tweets for discovering information hidden in plain sight (data and opinion mining).
+This repository contains the code base to extract tweets from Twitter using Twitter API , analyse and visualise tweets for discovering information hidden in plain sight (data , opinion mining and sentiment analysis).
 
 # How to Start
 
@@ -15,7 +15,7 @@ This repository contains the code base to extract tweets from Twitter using Twit
 > - Username and Password
 > - [Twitter API](https://developer.twitter.com/en/apply-for-access) : Consumer Key and Secret Key
 >
-> 3. View top trending tweets (Worldwide)
+> 3. View top trending tweets (Worldwide and specific countries)
 >
 > - Provides Top 50 worldwide trending tweets
 > - Dataframe with Topic, Tweet Volume and URL
@@ -60,11 +60,7 @@ The amount of time it took for me to build the first version of the usable appli
 
 # To Do
 
-> 1. Using SNS scrape for extraction to get rid of the API limitations.
 > 2. Add description on how to interpret the graphs
 > 3. Structure the analysis based on a narration (!)
 > 4. Named Entity Analysis
 > 5. Correlation (?) (But how?)
-> 6. User Profile Analysis
->
-> - Tweets analysis from a specific user timeline
