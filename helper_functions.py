@@ -557,7 +557,7 @@ def polarity_plot(df, title):
 @st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def tweets_on_dates(df, title):
 
-    st.write("If it is a large dataset, only a sample is shown in the graph")
+    # st.write("If it is a large dataset, only a sample is shown in the graph")
 
     date_list = []
     count_list = []
@@ -571,19 +571,20 @@ def tweets_on_dates(df, title):
     fig, ax = plt.subplots(figsize=(12, 12))
 
     # Add x-axis and y-axis
-    value = int(len(date_list) / 4)
-    ax.bar(date_list[:value], count_list[:value])
+    # value = int(len(date_list) / 4)
+    # ax.bar(date_list[:value], count_list[:value])
+    ax.bar(date_list, count_list)
 
     # Set title and labels for axes
     ax.set(xlabel="Date", ylabel="Counts", title=title)
 
     plt.xticks(rotation=90)
     # Define the date format
-    date_form = DateFormatter("%m-%y")
+    date_form = DateFormatter("%d-%m-%y")
     ax.xaxis.set_major_formatter(date_form)
 
     # Ensure a major tick for each week using (interval=1)
-    ax.xaxis.set_major_locator(mdates.WeekdayLocator(interval=2))
+    # ax.xaxis.set_major_locator(mdates.WeekdayLocator(interval=2))
     st.pyplot(fig)
     plt.close()
 
